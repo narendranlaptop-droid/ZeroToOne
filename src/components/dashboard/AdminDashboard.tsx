@@ -20,7 +20,7 @@ const adminFeatures = [
     title: 'User Management',
     description: 'Add or remove students and operators.',
     icon: Users,
-    href: '#',
+    href: '/dashboard/users',
   },
   {
     title: 'Task Management',
