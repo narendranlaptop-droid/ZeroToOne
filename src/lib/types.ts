@@ -7,3 +7,10 @@ export type User = {
   password?: string; // Should not be sent to client
   role: UserRole;
 };
+
+export type Task = {
+  id: string;
+  name: string;
+  deadline: string;
+  file: string;
+};

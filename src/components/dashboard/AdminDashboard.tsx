@@ -26,7 +26,7 @@ const adminFeatures = [
     title: 'Task Management',
     description: 'Upload and manage learning tasks.',
     icon: BookOpenCheck,
-    href: '#',
+    href: '/dashboard/tasks',
   },
   {
     title: 'View Submissions',
