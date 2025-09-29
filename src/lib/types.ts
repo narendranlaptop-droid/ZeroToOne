@@ -25,3 +25,13 @@ export type Post = {
   content: string;
   timestamp: string; // ISO 8601 string
 };
+
+export type Submission = {
+  id: string;
+  taskId: string;
+  taskName: string;
+  studentId: string;
+  studentName: string;
+  submissionDate: string; // ISO 8601 string
+  file: string;
+};

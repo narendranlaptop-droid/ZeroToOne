@@ -31,7 +31,7 @@ const adminFeatures = [
     title: 'View Submissions',
     description: 'See all student submissions.',
     icon: FileUp,
-    href: '#',
+    href: '/dashboard/submissions',
   },
   {
     title: 'View Scores',
