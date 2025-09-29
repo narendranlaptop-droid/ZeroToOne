@@ -8,7 +8,6 @@ import {
   LogOut,
   MessageSquare,
   Mountain,
-  Palette,
   Star,
   Users,
   LayoutDashboard,
@@ -28,7 +27,6 @@ const navLinks = {
     { href: '/dashboard/submissions', label: 'Submissions', icon: FileUp },
     { href: '/dashboard/scores', label: 'Scores', icon: Star },
     { href: '/dashboard/discussion', label: 'Discussion', icon: MessageSquare },
-    { href: '/dashboard/customize', label: 'Customize UI', icon: Palette },
   ],
   student: [
     ...commonLinks,

@@ -12,7 +12,6 @@ import {
   FileUp,
   Star,
   MessageSquare,
-  Palette,
 } from 'lucide-react';
 
 const adminFeatures = [
@@ -44,13 +43,7 @@ const adminFeatures = [
     title: 'Discussion Forum',
     description: 'Moderate the common discussion area.',
     icon: MessageSquare,
-    href: '#',
-  },
-  {
-    title: 'Customize UI',
-    description: 'Change the look and feel of the app.',
-    icon: Palette,
-    href: '/dashboard/customize',
+    href: '/dashboard/discussion',
   },
 ];
 
