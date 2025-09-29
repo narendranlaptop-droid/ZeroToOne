@@ -38,8 +38,9 @@ export function TaskList({ tasks, onRemoveTask }: TaskListProps) {
   const handleRemove = (taskId: string, taskName: string) => {
     onRemoveTask(taskId);
     toast({
+        variant: 'destructive',
         title: 'Task Removed',
-        description: `Task "${taskName}" has been removed.`,
+        description: `Task "${taskName}" has been permanently removed.`,
     });
   };
 
@@ -70,9 +71,9 @@ export function TaskList({ tasks, onRemoveTask }: TaskListProps) {
                   </AlertDialogTrigger>
                   <AlertDialogContent>
                     <AlertDialogHeader>
-                      <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                      <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                       <AlertDialogDescription>
-                        This action cannot be undone. This will permanently remove the task &quot;{task.name}&quot;.
+                        This action cannot be undone. This will permanently delete the task &quot;{task.name}&quot;.
                       </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
