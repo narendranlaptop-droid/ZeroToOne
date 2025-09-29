@@ -1,3 +1,40 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "users-icon",
+      "description": "An icon representing user management",
+      "imageUrl": "https://images.unsplash.com/photo-1600446020369-d5a277906615?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHx1c2VycyUyMHRlYW18ZW58MHx8fHwxNzU5MTUwNzkwfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "users team"
+    },
+    {
+      "id": "tasks-icon",
+      "description": "An icon representing task management",
+      "imageUrl": "https://images.unsplash.com/photo-1754039985001-ccafee437736?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHx0YXNrcyUyMGNoZWNrbGlzdHxlbnwwfHx8fDE3NTkxNTA3OTB8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "tasks checklist"
+    },
+    {
+      "id": "submissions-icon",
+      "description": "An icon representing submissions",
+      "imageUrl": "https://images.unsplash.com/photo-1580978607743-88f9166e4096?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxkb2N1bWVudCUyMHVwbG9hZHxlbnwwfHx8fDE3NTkxNTA3OTB8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "document upload"
+    },
+    {
+      "id": "scores-icon",
+      "description": "An icon representing scores",
+      "imageUrl": "https://images.unsplash.com/photo-1592551230478-ecd6b630cc08?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHx0cm9waHklMjBhd2FyZHxlbnwwfHx8fDE3NTkxNDU1MDd8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "trophy award"
+    },
+    {
+      "id": "discussion-icon",
+      "description": "An icon representing discussions",
+      "imageUrl": "https://images.unsplash.com/photo-1604881991405-b273c7a4386a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxwZW9wbGUlMjB0YWxraW5nfGVufDB8fHx8MTc1OTA1NzAxMXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "people talking"
+    },
+    {
+      "id": "customize-icon",
+      "description": "An icon representing UI customization",
+      "imageUrl": "https://images.unsplash.com/photo-1631127838686-7c27fd9ee3e6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxwYWxldHRlJTIwY29sb3JzfGVufDB8fHx8MTc1OTE1MDc5MHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "palette colors"
+    }
+  ]
 }

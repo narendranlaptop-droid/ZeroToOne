@@ -1,0 +1,48 @@
+import Link from 'next/link';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Star } from 'lucide-react';
+
+const operatorFeatures = [
+  {
+    title: 'View All Scores',
+    description: 'See all scores submitted by scorers.',
+    icon: Star,
+    href: '#',
+  },
+  {
+    title: 'Maintenance',
+    description: 'Perform maintenance tasks and report to admin.',
+    icon: Star,
+    href: '#',
+  },
+];
+
+export function OperatorDashboard() {
+  return (
+    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      {operatorFeatures.map((feature) => (
+        <Link href={feature.href} key={feature.title}>
+          <Card className="h-full hover:bg-card-foreground/5 transition-colors">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">
+                {feature.title}
+              </CardTitle>
+              <feature.icon className="h-5 w-5 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <p className="text-xs text-muted-foreground">
+                {feature.description}
+              </p>
+            </CardContent>
+          </Card>
+        </Link>
+      ))}
+    </div>
+  );
+}
