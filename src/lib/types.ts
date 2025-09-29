@@ -14,3 +14,14 @@ export type Task = {
   deadline: string;
   file: string;
 };
+
+export type Post = {
+  id: string;
+  author: {
+    id: string;
+    name: string;
+    avatar: string;
+  };
+  content: string;
+  timestamp: string; // ISO 8601 string
+};
