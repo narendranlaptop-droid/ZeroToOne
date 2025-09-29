@@ -9,14 +9,39 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import { Button } from '@/components/ui/button';
+import { Trash2 } from 'lucide-react';
 import { useAuthRedirect } from '@/hooks/use-auth-redirect';
+import { useToast } from '@/hooks/use-toast';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
 
 interface UserTableProps {
   users: User[];
+  onRemoveUser: (userId: string) => void;
 }
 
-export function UserTable({ users }: UserTableProps) {
+export function UserTable({ users, onRemoveUser }: UserTableProps) {
   useAuthRedirect('admin');
+  const { toast } = useToast();
+
+  const handleRemove = (userId: string, userName: string) => {
+    onRemoveUser(userId);
+    toast({
+      variant: 'destructive',
+      title: 'User Removed',
+      description: `User "${userName}" has been permanently removed.`,
+    });
+  };
 
   return (
     <div className="border rounded-lg">
@@ -26,6 +51,7 @@ export function UserTable({ users }: UserTableProps) {
             <TableHead>ID</TableHead>
             <TableHead>Name</TableHead>
             <TableHead>Email</TableHead>
+            <TableHead className="text-right">Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -34,6 +60,30 @@ export function UserTable({ users }: UserTableProps) {
               <TableCell className="font-medium">{user.id}</TableCell>
               <TableCell>{user.name}</TableCell>
               <TableCell>{user.email}</TableCell>
+              <TableCell className="text-right">
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <Button variant="ghost" size="icon">
+                      <Trash2 className="h-4 w-4" />
+                      <span className="sr-only">Remove</span>
+                    </Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        This action cannot be undone. This will permanently delete the user &quot;{user.name}&quot;.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                      <AlertDialogAction onClick={() => handleRemove(user.id, user.name)}>
+                        Continue
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
