@@ -24,6 +24,7 @@ import {
 import { Calendar } from '@/components/ui/calendar';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
+import type { Task } from '@/lib/types';
 
 const formSchema = z.object({
   name: z.string().min(1, { message: 'Task name is required.' }),
@@ -38,9 +39,15 @@ const formSchema = z.object({
           .refine((files) => files?.length === 1, 'File is required.'),
 });
 
-export function TaskForm() {
+type FormValues = z.infer<typeof formSchema>;
+
+interface TaskFormProps {
+  onAddTask: (task: Omit<Task, 'id' | 'file'> & { file: File }) => void;
+}
+
+export function TaskForm({ onAddTask }: TaskFormProps) {
   const { toast } = useToast();
-  const form = useForm<z.infer<typeof formSchema>>({
+  const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: '',
@@ -49,16 +56,24 @@ export function TaskForm() {
 
   const fileRef = form.register('file');
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // In a real app, you would handle the file upload and server action here.
+  function onSubmit(values: FormValues) {
+    const taskData = {
+        name: values.name,
+        deadline: format(values.deadline, 'yyyy-MM-dd'),
+        file: values.file[0],
+    };
+
+    onAddTask(taskData);
+
     toast({
-      title: 'Task Created (Simulation)',
-      description: `Name: ${values.name}, Deadline: ${format(
-        values.deadline,
-        'PPP'
-      )}, File: ${values.file[0].name}`,
+      title: 'Task Created',
+      description: `Task "${values.name}" has been added to the list.`,
     });
     form.reset();
+    const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement;
+    if(fileInput) {
+        fileInput.value = '';
+    }
   }
 
   return (
