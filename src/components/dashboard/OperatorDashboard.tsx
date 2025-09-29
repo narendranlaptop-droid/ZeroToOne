@@ -6,19 +6,19 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Star } from 'lucide-react';
+import { Star, Wrench } from 'lucide-react';
 
 const operatorFeatures = [
   {
     title: 'View All Scores',
     description: 'See all scores submitted by scorers.',
     icon: Star,
-    href: '#',
+    href: '/dashboard/scores',
   },
   {
     title: 'Maintenance',
     description: 'Perform maintenance tasks and report to admin.',
-    icon: Star,
+    icon: Wrench,
     href: '#',
   },
 ];

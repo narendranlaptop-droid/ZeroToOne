@@ -37,7 +37,7 @@ const adminFeatures = [
     title: 'View Scores',
     description: 'Check scores given by scorers.',
     icon: Star,
-    href: '#',
+    href: '/dashboard/scores',
   },
   {
     title: 'Discussion Forum',

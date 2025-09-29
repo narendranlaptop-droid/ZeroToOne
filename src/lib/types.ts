@@ -35,3 +35,13 @@ export type Submission = {
   submissionDate: string; // ISO 8601 string
   file: string;
 };
+
+export type Score = {
+    id: string;
+    studentName: string;
+    taskName: string;
+    score: number;
+    scorerName: string;
+    date: string; // ISO 8601 string
+    fileUrl: string;
+};
