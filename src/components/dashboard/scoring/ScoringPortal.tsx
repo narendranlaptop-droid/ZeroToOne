@@ -26,11 +26,13 @@ import { useAuth } from '@/context/AuthContext';
 import { Submission, Score } from '@/lib/types';
 import { Loader2 } from 'lucide-react';
 import { useAuthRedirect } from '@/hooks/use-auth-redirect';
-import { Textarea } from '@/components/ui/textarea';
 
 const scoreSchema = z.coerce.number().min(0).max(10);
 
 const formSchema = z.object({
+  scorerName: z.string().min(1, { message: 'Scorer name is required.' }),
+  scorerEmail: z.string().email({ message: 'Invalid email address.' }),
+  employeeId: z.string().min(1, { message: 'Employee ID is required.' }),
   submissionId: z.string().min(1, 'Please select a submission.'),
   depth: scoreSchema,
   relevance: scoreSchema,
@@ -58,6 +60,9 @@ export function ScoringPortal({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      scorerName: user?.name || '',
+      scorerEmail: user?.email || '',
+      employeeId: '',
       submissionId: '',
       depth: 0,
       relevance: 0,
@@ -106,7 +111,7 @@ export function ScoringPortal({
       authenticity: values.authenticity,
       packaging: values.packaging,
       total: totalScore,
-      scorerName: user.name,
+      scorerName: values.scorerName,
       date: new Date().toISOString(),
     };
 
@@ -119,7 +124,15 @@ export function ScoringPortal({
         title: 'Score Submitted',
         description: `Score of ${totalScore}/50 has been submitted for ${submission.studentName}.`,
       });
-      form.reset();
+      form.reset({
+        ...form.getValues(),
+        submissionId: '',
+        depth: 0,
+        relevance: 0,
+        applicability: 0,
+        authenticity: 0,
+        packaging: 0,
+      });
       setIsPending(false);
 
       window.dispatchEvent(new Event('storage'));
@@ -139,11 +152,50 @@ export function ScoringPortal({
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 max-w-lg mx-auto">
         <FormField
           control={form.control}
+          name="scorerName"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Scorer Name</FormLabel>
+              <FormControl>
+                <Input placeholder="Enter your name" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="scorerEmail"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Email ID</FormLabel>
+              <FormControl>
+                <Input placeholder="Enter your email" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="employeeId"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Employee ID</FormLabel>
+              <FormControl>
+                <Input placeholder="Enter your employee ID" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
           name="submissionId"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Student Submission</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <Select onValueChange={field.onChange} value={field.value}>
                 <FormControl>
                   <SelectTrigger>
                     <SelectValue placeholder="Select a submission to score" />
