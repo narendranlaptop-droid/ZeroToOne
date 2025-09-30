@@ -136,11 +136,6 @@ export function DashboardSidebar() {
         <Sidebar collapsible='icon'>
             <SidebarContentComponent />
         </Sidebar>
-        <SidebarInset>
-            <div className='p-2 absolute top-0 right-0'>
-                <SidebarTrigger />
-            </div>
-        </SidebarInset>
     </SidebarProvider>
   )
 }
