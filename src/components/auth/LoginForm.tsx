@@ -72,6 +72,23 @@ export function LoginForm() {
     }
   }
 
+  const handleScorerLogin = async () => {
+    const user = await login('scorer@zero.com', 'scorer@123');
+     if (user) {
+      toast({
+        title: 'Login Successful',
+        description: `Welcome back, ${user.name}!`,
+      });
+      router.push('/dashboard/scoring');
+    } else {
+       toast({
+        variant: 'destructive',
+        title: 'Login Failed',
+        description: 'Default scorer account not found.',
+      });
+    }
+  }
+
   return (
     <Card className="w-full max-w-sm">
       <CardHeader>
@@ -111,11 +128,11 @@ export function LoginForm() {
             <Button type="submit" className="w-full">
               Login
             </Button>
-             <Button variant="outline" className="w-full" asChild>
-              <Link href="/dashboard/scoring">Scorer Portal</Link>
-            </Button>
           </form>
         </Form>
+        <Button variant="outline" className="w-full mt-4" onClick={handleScorerLogin}>
+          Scorer Portal
+        </Button>
       </CardContent>
       <CardFooter className="flex justify-center">
         <Button variant="link" asChild>
