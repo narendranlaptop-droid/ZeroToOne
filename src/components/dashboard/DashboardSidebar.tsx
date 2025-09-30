@@ -38,7 +38,11 @@ const navLinks = {
     { href: '/dashboard/submissions', label: 'View Submissions', icon: FileUp },
     { href: '/dashboard/scoring', label: 'Score Work', icon: Star },
   ],
-  operator: [...commonLinks, { href: '/dashboard/scores', label: 'View Scores', icon: Star }],
+  operator: [
+    ...commonLinks,
+    { href: '/dashboard/submissions', label: 'Submissions', icon: FileUp },
+    { href: '/dashboard/scores', label: 'View Scores', icon: Star },
+  ],
 };
 
 export function DashboardSidebar() {

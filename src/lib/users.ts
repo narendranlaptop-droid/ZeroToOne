@@ -27,6 +27,7 @@ export const users: User[] = [
   // Scorer
   { id: 'scorer-01', name: 'Scorer One', email: 'scorer@zero.com', password: 'scorer@123', role: 'scorer' },
 
-  // Operator
-  { id: 'operator-01', name: 'Operator One', email: 'operator@zero.com', password: 'operator@123', role: 'operator' },
+  // Operators
+  { id: 'operator-01', name: 'Operator One', email: 'operator1@zero.com', password: 'operator1@123', role: 'operator' },
+  { id: 'operator-02', name: 'Operator Two', email: 'operator2@zero.com', password: 'operator2@123', role: 'operator' },
 ];

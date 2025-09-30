@@ -29,8 +29,8 @@ const navLinks = {
     { href: '/dashboard/scoring', title: 'Provide Scores', description: 'Give scores to students.' },
   ],
   operator: [
+    { href: '/dashboard/submissions', title: 'View Submissions', description: 'See all student submissions.' },
     { href: '/dashboard/scores', title: 'View All Scores', description: 'See all scores submitted by scorers.' },
-    { title: 'Maintenance', description: 'Perform maintenance tasks and report to admin.', href: '#' },
   ],
 };
 
