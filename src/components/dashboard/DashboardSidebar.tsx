@@ -82,8 +82,8 @@ export function DashboardSidebar() {
       <div className="p-4">
         <Button
           onClick={handleLogout}
-          variant="outline"
-          className="w-full text-white border-white hover:bg-gray-700"
+          variant="ghost"
+          className="w-full justify-start text-gray-300 hover:bg-gray-700 hover:text-white"
         >
           <LogOut className="h-5 w-5 mr-3" />
           Logout
