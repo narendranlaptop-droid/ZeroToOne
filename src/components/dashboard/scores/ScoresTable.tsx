@@ -106,6 +106,7 @@ export const columns: ColumnDef<Score>[] = [
   {
     accessorKey: 'scorerName',
     header: 'Scorer',
+    cell: ({ row }) => <div>{row.getValue('scorerName')}</div>,
   },
 ];
 
