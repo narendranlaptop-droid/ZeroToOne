@@ -10,7 +10,9 @@ import { useToast } from '@/hooks/use-toast';
 
 export function DiscussionForum() {
   const { user } = useAuth();
-  const [posts, setPosts] = useState<Post[]>(initialPosts);
+  const [posts, setPosts] = useState<Post[]>(
+    initialPosts.filter((post) => post.author.id.startsWith('admin'))
+  );
   const { toast } = useToast();
 
   const addPost = (content: string) => {
@@ -40,7 +42,7 @@ export function DiscussionForum() {
 
   return (
     <div className="space-y-6">
-      <PostForm onAddPost={addPost} />
+      {user?.role === 'admin' && <PostForm onAddPost={addPost} />}
       <PostList posts={posts} onRemovePost={removePost} />
     </div>
   );

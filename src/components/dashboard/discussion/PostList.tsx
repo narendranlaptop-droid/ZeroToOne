@@ -27,6 +27,14 @@ interface PostListProps {
 export function PostList({ posts, onRemovePost }: PostListProps) {
   const { user } = useAuth();
 
+  if (posts.length === 0) {
+    return (
+        <Card className="p-4 text-center text-muted-foreground">
+            No discussions have been posted yet.
+        </Card>
+    );
+  }
+
   return (
     <div className="space-y-4">
       {posts.map((post) => (
