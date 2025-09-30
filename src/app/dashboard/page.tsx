@@ -18,7 +18,6 @@ const navLinks = {
     { href: '/dashboard/submissions', title: 'View Submissions', description: 'See all student submissions.' },
     { href: '/dashboard/scores', title: 'View Scores', description: 'Check scores given by scorers.' },
     { href: '/dashboard/discussion', title: 'Discussion Forum', description: 'Moderate the common discussion area.' },
-    { href: '/dashboard/customize', title: 'Customize UI', description: 'Customize the look and feel of the application.' },
   ],
   student: [
     { href: '/dashboard/tasks', title: 'My Tasks', description: 'View tasks assigned by the admin.' },

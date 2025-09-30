@@ -38,7 +38,6 @@ const navLinks = {
     { href: '/dashboard/submissions', label: 'Submissions', icon: FileUp },
     { href: '/dashboard/scores', label: 'Scores', icon: Star },
     { href: '/dashboard/discussion', label: 'Discussion', icon: MessageSquare },
-    { href: '/dashboard/customize', label: 'Customize', icon: Palette },
   ],
   student: [
     ...commonLinks,
