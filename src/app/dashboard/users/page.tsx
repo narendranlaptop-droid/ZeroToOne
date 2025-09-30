@@ -105,7 +105,7 @@ export default function UsersPage() {
               <CardTitle>Student List</CardTitle>
               <CardDescription>
                 A list of all students in the system.
-              </-CardDescription>
+              </CardDescription>
             </CardHeader>
             <CardContent>
               <UserTable users={users} />
