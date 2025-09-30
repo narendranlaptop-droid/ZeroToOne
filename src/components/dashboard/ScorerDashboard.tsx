@@ -26,7 +26,7 @@ const scorerFeatures = [
 
 export function ScorerDashboard() {
   return (
-    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-2">
+    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
       {scorerFeatures.map((feature) => (
         <Link href={feature.href} key={feature.title}>
            <Card className="h-full hover:border-primary transition-colors group">
