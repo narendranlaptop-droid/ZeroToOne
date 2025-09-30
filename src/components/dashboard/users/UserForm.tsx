@@ -3,6 +3,7 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import { useTransition } from 'react';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -15,7 +16,8 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
-import type { User } from '@/lib/types';
+import { handleAddStudent } from './actions';
+import { Loader2 } from 'lucide-react';
 
 const formSchema = z.object({
   name: z.string().min(1, { message: 'Name is required.' }),
@@ -25,12 +27,10 @@ const formSchema = z.object({
 
 type FormValues = z.infer<typeof formSchema>;
 
-interface UserFormProps {
-  onAddUser: (user: Omit<User, 'id' | 'role'>) => void;
-}
-
-export function UserForm({ onAddUser }: UserFormProps) {
+export function UserForm() {
   const { toast } = useToast();
+  const [isPending, startTransition] = useTransition();
+
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -41,12 +41,23 @@ export function UserForm({ onAddUser }: UserFormProps) {
   });
 
   function onSubmit(values: FormValues) {
-    onAddUser(values);
-    toast({
-      title: 'Student Added',
-      description: `Student "${values.name}" has been added.`,
+    startTransition(async () => {
+      const result = await handleAddStudent(values);
+
+      if (result.success) {
+        toast({
+          title: 'Student Added',
+          description: `Student "${values.name}" has been added.`,
+        });
+        form.reset();
+      } else {
+        toast({
+          variant: 'destructive',
+          title: 'Error',
+          description: result.error || 'An unknown error occurred.',
+        });
+      }
     });
-    form.reset();
   }
 
   return (
@@ -91,7 +102,8 @@ export function UserForm({ onAddUser }: UserFormProps) {
             </FormItem>
           )}
         />
-        <Button type="submit" className="w-full">
+        <Button type="submit" className="w-full" disabled={isPending}>
+          {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
           Add Student
         </Button>
       </form>

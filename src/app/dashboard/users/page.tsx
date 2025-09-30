@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { UserForm } from '@/components/dashboard/users/UserForm';
 import { UserTable } from '@/components/dashboard/users/UserTable';
 import {
@@ -10,28 +10,72 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { users as initialUsers } from '@/lib/users';
 import type { User } from '@/lib/types';
 import { useAuthRedirect } from '@/hooks/use-auth-redirect';
+import { collection, onSnapshot, query, where } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
+import { Skeleton } from '@/components/ui/skeleton';
 
 export default function UsersPage() {
   useAuthRedirect('admin');
-  const [users, setUsers] = useState<User[]>(
-    initialUsers.filter((user) => user.role === 'student')
-  );
+  const [users, setUsers] = useState<User[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const addUser = (newUser: Omit<User, 'id' | 'role'>) => {
-    const newUserWithId: User = {
-      ...newUser,
-      id: `student-${Date.now()}`,
-      role: 'student',
-    };
-    setUsers((prevUsers) => [newUserWithId, ...prevUsers]);
-  };
+  useEffect(() => {
+    const q = query(collection(db, 'users'), where('role', '==', 'student'));
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const studentUsers: User[] = [];
+      querySnapshot.forEach((doc) => {
+        studentUsers.push({ id: doc.id, ...doc.data() } as User);
+      });
+      setUsers(studentUsers);
+      setLoading(false);
+    });
 
-  const removeUser = (userId: string) => {
-    setUsers((prevUsers) => prevUsers.filter((user) => user.id !== userId));
-  };
+    return () => unsubscribe();
+  }, []);
+
+  if (loading) {
+    return (
+      <div>
+        <h1 className="text-3xl font-bold tracking-tight font-headline">
+          User Management
+        </h1>
+        <p className="text-muted-foreground">
+          Add, view, and remove student users.
+        </p>
+        <div className="grid gap-8 mt-8 lg:grid-cols-3">
+          <div className="lg:col-span-1">
+            <Card>
+              <CardHeader>
+                <CardTitle>Add New Student</CardTitle>
+                <CardDescription>
+                  Fill out the form to add a new student.
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Skeleton className="h-48 w-full" />
+              </CardContent>
+            </Card>
+          </div>
+          <div className="lg:col-span-2">
+             <Card>
+              <CardHeader>
+                <CardTitle>Student List</CardTitle>
+                <CardDescription>
+                  A list of all students in the system.
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                 <Skeleton className="h-64 w-full" />
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
 
   return (
     <div>
@@ -51,7 +95,7 @@ export default function UsersPage() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <UserForm onAddUser={addUser} />
+              <UserForm />
             </CardContent>
           </Card>
         </div>
@@ -61,10 +105,10 @@ export default function UsersPage() {
               <CardTitle>Student List</CardTitle>
               <CardDescription>
                 A list of all students in the system.
-              </CardDescription>
+              </-CardDescription>
             </CardHeader>
             <CardContent>
-              <UserTable users={users} onRemoveUser={removeUser} />
+              <UserTable users={users} />
             </CardContent>
           </Card>
         </div>

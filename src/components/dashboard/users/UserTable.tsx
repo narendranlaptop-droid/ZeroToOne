@@ -24,23 +24,31 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
+import { handleRemoveStudent } from './actions';
 
 interface UserTableProps {
   users: User[];
-  onRemoveUser: (userId: string) => void;
 }
 
-export function UserTable({ users, onRemoveUser }: UserTableProps) {
+export function UserTable({ users }: UserTableProps) {
   useAuthRedirect('admin');
   const { toast } = useToast();
 
-  const handleRemove = (userId: string, userName: string) => {
-    onRemoveUser(userId);
-    toast({
-      variant: 'destructive',
-      title: 'User Removed',
-      description: `User "${userName}" has been permanently removed.`,
-    });
+  const handleRemove = async (userId: string, userName: string) => {
+    const result = await handleRemoveStudent(userId);
+    if (result.success) {
+      toast({
+        variant: 'destructive',
+        title: 'User Removed',
+        description: `User "${userName}" has been permanently removed.`,
+      });
+    } else {
+      toast({
+        variant: 'destructive',
+        title: 'Error Removing User',
+        description: result.error || 'An unknown error occurred.',
+      });
+    }
   };
 
   return (
@@ -57,7 +65,7 @@ export function UserTable({ users, onRemoveUser }: UserTableProps) {
         <TableBody>
           {users.map((user) => (
             <TableRow key={user.id}>
-              <TableCell className="font-medium">{user.id}</TableCell>
+              <TableCell className="font-medium truncate max-w-24">{user.id}</TableCell>
               <TableCell>{user.name}</TableCell>
               <TableCell>{user.email}</TableCell>
               <TableCell className="text-right">
