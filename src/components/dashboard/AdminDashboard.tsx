@@ -6,44 +6,46 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import {
-  Users,
-  BookOpenCheck,
-  FileUp,
-  Star,
-  MessageSquare,
-} from 'lucide-react';
+import Image from 'next/image';
+import { PlaceHolderImages } from '@/lib/placeholder-images';
+import { Palette } from 'lucide-react';
 
 const adminFeatures = [
   {
     title: 'User Management',
     description: 'Add or remove students and operators.',
-    icon: Users,
+    image: PlaceHolderImages.find((img) => img.id === 'users-icon'),
     href: '/dashboard/users',
   },
   {
     title: 'Task Management',
     description: 'Upload and manage learning tasks.',
-    icon: BookOpenCheck,
+    image: PlaceHolderImages.find((img) => img.id === 'tasks-icon'),
     href: '/dashboard/tasks',
   },
   {
     title: 'View Submissions',
     description: 'See all student submissions.',
-    icon: FileUp,
+    image: PlaceHolderImages.find((img) => img.id === 'submissions-icon'),
     href: '/dashboard/submissions',
   },
   {
     title: 'View Scores',
     description: 'Check scores given by scorers.',
-    icon: Star,
+    image: PlaceHolderImages.find((img) => img.id === 'scores-icon'),
     href: '/dashboard/scores',
   },
   {
     title: 'Discussion Forum',
     description: 'Moderate the common discussion area.',
-    icon: MessageSquare,
+    image: PlaceHolderImages.find((img) => img.id === 'discussion-icon'),
     href: '/dashboard/discussion',
+  },
+  {
+    title: 'Customize UI',
+    description: 'Customize the look and feel of the application.',
+    image: PlaceHolderImages.find((img) => img.id === 'customize-icon'),
+    href: '/dashboard/customize',
   },
 ];
 
@@ -52,15 +54,23 @@ export function AdminDashboard() {
     <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
       {adminFeatures.map((feature) => (
         <Link href={feature.href} key={feature.title}>
-          <Card className="h-full hover:bg-card-foreground/5 transition-colors">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">
-                {feature.title}
-              </CardTitle>
-              <feature.icon className="h-5 w-5 text-muted-foreground" />
+          <Card className="h-full hover:border-primary transition-colors group">
+            <CardHeader>
+              {feature.image && (
+                <div className="relative h-40 w-full mb-4 rounded-lg overflow-hidden">
+                  <Image
+                    src={feature.image.imageUrl}
+                    alt={feature.title}
+                    fill
+                    className="object-cover transition-transform duration-300 group-hover:scale-105"
+                    data-ai-hint={feature.image.imageHint}
+                  />
+                </div>
+              )}
+              <CardTitle>{feature.title}</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-xs text-muted-foreground">
+              <p className="text-sm text-muted-foreground">
                 {feature.description}
               </p>
             </CardContent>

@@ -10,11 +10,23 @@ import {
   Star,
   Users,
   LayoutDashboard,
+  Palette,
 } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
 import { useAuthRedirect } from '@/hooks/use-auth-redirect';
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuItem,
+  SidebarMenuButton,
+  SidebarFooter,
+  SidebarTrigger,
+  SidebarProvider,
+  SidebarInset,
+} from '@/components/ui/sidebar';
 
 const commonLinks = [{ href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard }];
 
@@ -26,6 +38,7 @@ const navLinks = {
     { href: '/dashboard/submissions', label: 'Submissions', icon: FileUp },
     { href: '/dashboard/scores', label: 'Scores', icon: Star },
     { href: '/dashboard/discussion', label: 'Discussion', icon: MessageSquare },
+    { href: '/dashboard/customize', label: 'Customize', icon: Palette },
   ],
   student: [
     ...commonLinks,
@@ -41,7 +54,7 @@ const navLinks = {
   operator: [...commonLinks, { href: '/dashboard/scores', label: 'View Scores', icon: Star }],
 };
 
-export function DashboardSidebar() {
+function SidebarContentComponent() {
   const { user, loading } = useAuthRedirect();
   const { logout } = useAuth();
   const router = useRouter();
@@ -53,60 +66,81 @@ export function DashboardSidebar() {
   };
 
   if (loading || !user) {
-    // Skeleton for sidebar
     return (
-      <aside className="w-64 flex-shrink-0 border-r bg-gray-100 dark:bg-gray-800 p-4">
-        <div className="flex h-full flex-col justify-between">
-          <div className="space-y-4">
-            <div className="flex items-center gap-2 h-10">
-                <div className="flex items-center justify-center rounded-md bg-primary p-2 h-10 w-10">
-                    <span className="text-sm font-bold text-primary-foreground">ZTO</span>
+        <div className="flex h-full flex-col p-4">
+            <div className="flex items-center gap-2 h-10 mb-8">
+                <div className="flex items-center justify-center rounded-md bg-primary p-2 h-10 w-10 animate-pulse">
+                    <span className="text-sm font-bold text-primary-foreground">Z</span>
                 </div>
-                <span className="font-semibold text-lg">ZeroToOne</span>
+                <span className="font-semibold text-lg animate-pulse">ZeroToOne</span>
             </div>
-            <div className="space-y-2">
-                <div className="h-8 bg-gray-200 rounded animate-pulse"></div>
-                <div className="h-8 bg-gray-200 rounded animate-pulse"></div>
-                <div className="h-8 bg-gray-200 rounded animate-pulse"></div>
+            <div className="flex-1 space-y-2">
+                <div className="h-8 bg-muted rounded animate-pulse"></div>
+                <div className="h-8 bg-muted rounded animate-pulse"></div>
+                <div className="h-8 bg-muted rounded animate-pulse"></div>
             </div>
-          </div>
-          <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
+            <div className="h-10 bg-muted rounded animate-pulse mt-auto"></div>
         </div>
-      </aside>
     );
   }
 
   const links = navLinks[user.role] || [];
-
+  
   return (
-    <aside className="w-64 flex-shrink-0 border-r bg-secondary/40 p-4 flex flex-col">
-      <div className="flex items-center gap-2 mb-8">
-        <div className="flex items-center justify-center rounded-md bg-primary p-2 h-10 w-10">
-            <span className="text-sm font-bold text-primary-foreground">ZTO</span>
+    <>
+    <SidebarHeader>
+        <div className="flex items-center gap-2">
+            <div className="flex items-center justify-center rounded-md bg-primary p-2 h-10 w-10">
+                <span className="text-sm font-bold text-primary-foreground">Z</span>
+            </div>
+            <span className="font-semibold text-lg text-primary-foreground">ZeroToOne</span>
         </div>
-        <span className="font-semibold text-lg text-primary">ZeroToOne</span>
-      </div>
-      <nav className="flex-1 space-y-2">
-        {links.map((link) => (
-          <Button
-            key={link.href}
-            variant={pathname === link.href ? 'secondary' : 'ghost'}
-            className="w-full justify-start"
-            asChild
-          >
-            <Link href={link.href}>
-              <link.icon className="mr-2 h-4 w-4" />
-              {link.label}
-            </Link>
-          </Button>
-        ))}
-      </nav>
-      <div className="mt-auto">
-        <Button variant="ghost" className="w-full justify-start" onClick={handleLogout}>
-          <LogOut className="mr-2 h-4 w-4" />
-          Logout
-        </Button>
-      </div>
-    </aside>
-  );
+    </SidebarHeader>
+
+    <SidebarContent>
+        <SidebarMenu>
+            {links.map((link) => (
+            <SidebarMenuItem key={link.href}>
+                <SidebarMenuButton
+                    asChild
+                    isActive={pathname === link.href}
+                    >
+                    <Link href={link.href}>
+                        <link.icon />
+                        <span>{link.label}</span>
+                    </Link>
+                </SidebarMenuButton>
+            </SidebarMenuItem>
+            ))}
+        </SidebarMenu>
+    </SidebarContent>
+
+    <SidebarFooter>
+        <SidebarMenu>
+            <SidebarMenuItem>
+                <SidebarMenuButton onClick={handleLogout}>
+                    <LogOut />
+                    <span>Logout</span>
+                </SidebarMenuButton>
+            </SidebarMenuItem>
+        </SidebarMenu>
+    </SidebarFooter>
+    </>
+  )
+
+}
+
+export function DashboardSidebar() {
+  return (
+    <SidebarProvider>
+        <Sidebar collapsible='icon'>
+            <SidebarContentComponent />
+        </Sidebar>
+        <SidebarInset>
+            <div className='p-2 absolute top-0 right-0'>
+                <SidebarTrigger />
+            </div>
+        </SidebarInset>
+    </SidebarProvider>
+  )
 }
