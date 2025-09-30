@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -56,21 +56,16 @@ export function ScoringPortal({
   const [isPending, setIsPending] = useState(false);
   const [submissions, setSubmissions] = useState<Submission[]>(initialSubmissions);
   const [scores, setScores] = useState<Score[]>(initialScores);
+  
+  useEffect(() => {
+    const storedScores = localStorage.getItem('scores');
+    if (storedScores) {
+      setScores(JSON.parse(storedScores));
+    } else {
+      localStorage.setItem('scores', JSON.stringify(initialScores));
+    }
+  }, [initialScores]);
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      scorerName: user?.name || '',
-      scorerEmail: user?.email || '',
-      employeeId: '',
-      submissionId: '',
-      depth: 0,
-      relevance: 0,
-      applicability: 0,
-      authenticity: 0,
-      packaging: 0,
-    },
-  });
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     if (!user) {
@@ -120,6 +115,9 @@ export function ScoringPortal({
       setScores(updatedScores);
       localStorage.setItem('scores', JSON.stringify(updatedScores));
 
+      // Dispatch a storage event to notify other tabs/windows
+      window.dispatchEvent(new Event('storage'));
+
       toast({
         title: 'Score Submitted',
         description: `Score of ${totalScore}/50 has been submitted for ${submission.studentName}.`,
@@ -134,8 +132,6 @@ export function ScoringPortal({
         packaging: 0,
       });
       setIsPending(false);
-
-      window.dispatchEvent(new Event('storage'));
     }, 1000);
   };
 

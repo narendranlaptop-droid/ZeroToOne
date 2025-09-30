@@ -16,30 +16,28 @@ export default function ScoresPage() {
   const [scores, setScores] = useState<Score[]>(initialScores);
 
   useEffect(() => {
-    const storedScores = localStorage.getItem('scores');
-    if (storedScores) {
-      try {
-        setScores(JSON.parse(storedScores));
-      } catch (e) {
-        console.error("Failed to parse scores from localStorage", e);
-        setScores(initialScores);
-        localStorage.setItem('scores', JSON.stringify(initialScores));
-      }
-    } else {
-        localStorage.setItem('scores', JSON.stringify(initialScores));
-    }
-
-    const handleStorageChange = () => {
-        const updatedScores = localStorage.getItem('scores');
-        if(updatedScores) {
-            setScores(JSON.parse(updatedScores));
+    const updateScores = () => {
+      const storedScores = localStorage.getItem('scores');
+      if (storedScores) {
+        try {
+          setScores(JSON.parse(storedScores));
+        } catch (e) {
+          console.error("Failed to parse scores from localStorage", e);
+          setScores(initialScores);
+          localStorage.setItem('scores', JSON.stringify(initialScores));
         }
-    }
+      } else {
+          localStorage.setItem('scores', JSON.stringify(initialScores));
+          setScores(initialScores);
+      }
+    };
+    
+    updateScores();
 
-    window.addEventListener('storage', handleStorageChange);
+    window.addEventListener('storage', updateScores);
 
     return () => {
-        window.removeEventListener('storage', handleStorageChange);
+        window.removeEventListener('storage', updateScores);
     }
   }, []);
 
