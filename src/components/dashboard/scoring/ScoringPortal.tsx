@@ -48,7 +48,7 @@ export function ScoringPortal({
   initialSubmissions,
   initialScores,
 }: ScoringPortalProps) {
-  useAuthRedirect(['scorer', 'admin']);
+  useAuthRedirect('scorer');
   const { user } = useAuth();
   const { toast } = useToast();
   const [isPending, setIsPending] = useState(false);
