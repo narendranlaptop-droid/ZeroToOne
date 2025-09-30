@@ -14,19 +14,44 @@ import type { User } from '@/lib/types';
 import { useAuthRedirect } from '@/hooks/use-auth-redirect';
 import { users as initialUsers } from '@/lib/users';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useToast } from '@/hooks/use-toast';
 
 export default function UsersPage() {
   useAuthRedirect('admin');
+  const { toast } = useToast();
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // For demonstration, we'll use the static list of users.
-    // In a real application, this would fetch from a live database.
     const studentUsers = initialUsers.filter(user => user.role === 'student');
     setUsers(studentUsers);
     setLoading(false);
   }, []);
+
+  const addUser = (newUser: Omit<User, 'id' | 'role'>) => {
+    const userWithId: User = {
+      ...newUser,
+      id: `student-${Date.now()}`,
+      role: 'student',
+    };
+    setUsers(prevUsers => [userWithId, ...prevUsers]);
+    toast({
+      title: 'Student Added',
+      description: `Student "${newUser.name}" has been added.`,
+    });
+  };
+
+  const removeUser = (userId: string) => {
+    const userToRemove = users.find(user => user.id === userId);
+    setUsers(prevUsers => prevUsers.filter(user => user.id !== userId));
+     if(userToRemove) {
+      toast({
+        variant: 'destructive',
+        title: 'User Removed',
+        description: `User "${userToRemove.name}" has been permanently removed.`,
+      });
+    }
+  };
 
   if (loading) {
     return (
@@ -88,7 +113,7 @@ export default function UsersPage() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <UserForm />
+              <UserForm onAddUser={addUser} />
             </CardContent>
           </Card>
         </div>
@@ -101,7 +126,7 @@ export default function UsersPage() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <UserTable users={users} />
+              <UserTable users={users} onRemoveUser={removeUser} />
             </CardContent>
           </Card>
         </div>

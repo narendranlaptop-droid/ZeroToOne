@@ -15,9 +15,8 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { useToast } from '@/hooks/use-toast';
-import { handleAddStudent } from './actions';
 import { Loader2 } from 'lucide-react';
+import type { User } from '@/lib/types';
 
 const formSchema = z.object({
   name: z.string().min(1, { message: 'Name is required.' }),
@@ -27,8 +26,11 @@ const formSchema = z.object({
 
 type FormValues = z.infer<typeof formSchema>;
 
-export function UserForm() {
-  const { toast } = useToast();
+interface UserFormProps {
+    onAddUser: (user: Omit<User, 'id' | 'role'>) => void;
+}
+
+export function UserForm({ onAddUser }: UserFormProps) {
   const [isPending, startTransition] = useTransition();
 
   const form = useForm<FormValues>({
@@ -41,22 +43,9 @@ export function UserForm() {
   });
 
   function onSubmit(values: FormValues) {
-    startTransition(async () => {
-      const result = await handleAddStudent(values);
-
-      if (result.success) {
-        toast({
-          title: 'Student Added',
-          description: `Student "${values.name}" has been added.`,
-        });
+    startTransition(() => {
+        onAddUser(values);
         form.reset();
-      } else {
-        toast({
-          variant: 'destructive',
-          title: 'Error',
-          description: result.error || 'An unknown error occurred.',
-        });
-      }
     });
   }
 

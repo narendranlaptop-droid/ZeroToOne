@@ -12,7 +12,6 @@ import {
 import { Button } from '@/components/ui/button';
 import { Trash2 } from 'lucide-react';
 import { useAuthRedirect } from '@/hooks/use-auth-redirect';
-import { useToast } from '@/hooks/use-toast';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -24,32 +23,14 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
-import { handleRemoveStudent } from './actions';
 
 interface UserTableProps {
   users: User[];
+  onRemoveUser: (userId: string) => void;
 }
 
-export function UserTable({ users }: UserTableProps) {
+export function UserTable({ users, onRemoveUser }: UserTableProps) {
   useAuthRedirect('admin');
-  const { toast } = useToast();
-
-  const handleRemove = async (userId: string, userName: string) => {
-    const result = await handleRemoveStudent(userId);
-    if (result.success) {
-      toast({
-        variant: 'destructive',
-        title: 'User Removed',
-        description: `User "${userName}" has been permanently removed.`,
-      });
-    } else {
-      toast({
-        variant: 'destructive',
-        title: 'Error Removing User',
-        description: result.error || 'An unknown error occurred.',
-      });
-    }
-  };
 
   return (
     <div className="border rounded-lg">
@@ -85,7 +66,7 @@ export function UserTable({ users }: UserTableProps) {
                     </AlertDialogHeader>
                     <AlertDialogFooter>
                       <AlertDialogCancel>Cancel</AlertDialogCancel>
-                      <AlertDialogAction onClick={() => handleRemove(user.id, user.name)}>
+                      <AlertDialogAction onClick={() => onRemoveUser(user.id)}>
                         Continue
                       </AlertDialogAction>
                     </AlertDialogFooter>
