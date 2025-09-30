@@ -32,7 +32,7 @@ const studentFeatures = [
 
 export function StudentDashboard() {
   return (
-    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3">
       {studentFeatures.map((feature) => (
         <Link href={feature.href} key={feature.title}>
            <Card className="h-full hover:border-primary transition-colors group">
