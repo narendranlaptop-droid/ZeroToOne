@@ -57,6 +57,21 @@ export function ScoringPortal({
   const [submissions, setSubmissions] = useState<Submission[]>(initialSubmissions);
   const [scores, setScores] = useState<Score[]>(initialScores);
   
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      scorerName: '',
+      scorerEmail: '',
+      employeeId: '',
+      submissionId: '',
+      depth: 0,
+      relevance: 0,
+      applicability: 0,
+      authenticity: 0,
+      packaging: 0,
+    },
+  });
+
   useEffect(() => {
     const storedScores = localStorage.getItem('scores');
     if (storedScores) {
