@@ -5,7 +5,6 @@ import {
   ColumnDef,
   ColumnFiltersState,
   SortingState,
-  VisibilityState,
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
@@ -13,7 +12,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import { ArrowUpDown, Download } from 'lucide-react';
+import { ArrowUpDown } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -27,89 +26,86 @@ import {
 } from '@/components/ui/table';
 import { Score } from '@/lib/types';
 import { format } from 'date-fns';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 
 export const columns: ColumnDef<Score>[] = [
   {
     accessorKey: 'taskName',
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-        >
-          Task Name
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
+    header: ({ column }) => (
+      <Button
+        variant="ghost"
+        onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+      >
+        Task Name
+        <ArrowUpDown className="ml-2 h-4 w-4" />
+      </Button>
+    ),
     cell: ({ row }) => <div>{row.getValue('taskName')}</div>,
   },
   {
     accessorKey: 'studentName',
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-        >
-          Student
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
+    header: ({ column }) => (
+      <Button
+        variant="ghost"
+        onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+      >
+        Student
+        <ArrowUpDown className="ml-2 h-4 w-4" />
+      </Button>
+    ),
     cell: ({ row }) => <div>{row.getValue('studentName')}</div>,
   },
-    {
-    accessorKey: 'score',
-    header: ({ column }) => {
+  {
+    accessorKey: 'total',
+    header: ({ column }) => (
+      <Button
+        variant="ghost"
+        onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+      >
+        Total Score (/50)
+        <ArrowUpDown className="ml-2 h-4 w-4" />
+      </Button>
+    ),
+    cell: ({ row }) => {
+      const score = row.original;
+      const breakdown = `Depth: ${score.depth}\nRelevance: ${score.relevance}\nApplicability: ${score.applicability}\nAuthenticity: ${score.authenticity}\nPackaging: ${score.packaging}`;
       return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-        >
-          Score
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger>
+              <div className="text-center font-semibold">{row.getValue('total')}</div>
+            </TooltipTrigger>
+            <TooltipContent>
+              <pre className="text-sm">{breakdown}</pre>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       );
     },
-    cell: ({ row }) => <div className='text-center'>{row.getValue('score')}</div>,
   },
   {
     accessorKey: 'date',
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-        >
-          Scored Date
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
+    header: ({ column }) => (
+      <Button
+        variant="ghost"
+        onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+      >
+        Scored Date
+        <ArrowUpDown className="ml-2 h-4 w-4" />
+      </Button>
+    ),
     cell: ({ row }) => (
       <div>{format(new Date(row.getValue('date')), 'PPP')}</div>
     ),
   },
-    {
+  {
     accessorKey: 'scorerName',
     header: 'Scorer',
-  },
-  {
-    id: 'actions',
-    enableHiding: false,
-    cell: ({ row }) => {
-      const score = row.original;
-
-      return (
-        <a href={score.fileUrl} download>
-          <Button variant="ghost" size="icon">
-            <Download className="h-4 w-4" />
-            <span className="sr-only">Download score sheet</span>
-          </Button>
-        </a>
-      );
-    },
   },
 ];
 
@@ -119,9 +115,7 @@ interface ScoresTableProps {
 
 export function ScoresTable({ scores }: ScoresTableProps) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
-  );
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
 
   const table = useReactTable({
     data: scores,
@@ -143,9 +137,7 @@ export function ScoresTable({ scores }: ScoresTableProps) {
       <div className="flex items-center py-4">
         <Input
           placeholder="Filter by student name..."
-          value={
-            (table.getColumn('studentName')?.getFilterValue() as string) ?? ''
-          }
+          value={(table.getColumn('studentName')?.getFilterValue() as string) ?? ''}
           onChange={(event) =>
             table.getColumn('studentName')?.setFilterValue(event.target.value)
           }
@@ -157,18 +149,16 @@ export function ScoresTable({ scores }: ScoresTableProps) {
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <TableHead key={header.id}>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                    </TableHead>
-                  );
-                })}
+                {headerGroup.headers.map((header) => (
+                  <TableHead key={header.id}>
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                  </TableHead>
+                ))}
               </TableRow>
             ))}
           </TableHeader>
@@ -181,20 +171,14 @@ export function ScoresTable({ scores }: ScoresTableProps) {
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </TableCell>
                   ))}
                 </TableRow>
               ))
             ) : (
               <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center"
-                >
+                <TableCell colSpan={columns.length} className="h-24 text-center">
                   No results.
                 </TableCell>
               </TableRow>

@@ -40,8 +40,12 @@ export type Score = {
     id: string;
     studentName: string;
     taskName: string;
-    score: number;
+    depth: number;
+    relevance: number;
+    applicability: number;
+    authenticity: number;
+    packaging: number;
+    total: number;
     scorerName: string;
     date: string; // ISO 8601 string
-    fileUrl: string;
 };

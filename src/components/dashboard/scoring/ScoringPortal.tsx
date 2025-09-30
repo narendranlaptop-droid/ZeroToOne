@@ -26,17 +26,17 @@ import { useAuth } from '@/context/AuthContext';
 import { Submission, Score } from '@/lib/types';
 import { Loader2 } from 'lucide-react';
 import { useAuthRedirect } from '@/hooks/use-auth-redirect';
+import { Textarea } from '@/components/ui/textarea';
+
+const scoreSchema = z.coerce.number().min(0).max(10);
 
 const formSchema = z.object({
   submissionId: z.string().min(1, 'Please select a submission.'),
-  score: z.coerce
-    .number()
-    .min(0, 'Score must be at least 0.')
-    .max(100, 'Score cannot be more than 100.'),
-  scoreFile:
-    typeof window === 'undefined'
-      ? z.any()
-      : z.instanceof(FileList).refine((files) => files?.length === 1, 'A score file is required.'),
+  depth: scoreSchema,
+  relevance: scoreSchema,
+  applicability: scoreSchema,
+  authenticity: scoreSchema,
+  packaging: scoreSchema,
 });
 
 interface ScoringPortalProps {
@@ -44,7 +44,10 @@ interface ScoringPortalProps {
   initialScores: Score[];
 }
 
-export function ScoringPortal({ initialSubmissions, initialScores }: ScoringPortalProps) {
+export function ScoringPortal({
+  initialSubmissions,
+  initialScores,
+}: ScoringPortalProps) {
   useAuthRedirect(['scorer', 'admin']);
   const { user } = useAuth();
   const { toast } = useToast();
@@ -52,56 +55,84 @@ export function ScoringPortal({ initialSubmissions, initialScores }: ScoringPort
   const [submissions, setSubmissions] = useState<Submission[]>(initialSubmissions);
   const [scores, setScores] = useState<Score[]>(initialScores);
 
-
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
+    defaultValues: {
+      submissionId: '',
+      depth: 0,
+      relevance: 0,
+      applicability: 0,
+      authenticity: 0,
+      packaging: 0,
+    },
   });
-  const fileRef = form.register('scoreFile');
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     if (!user) {
-        toast({ variant: 'destructive', title: 'Error', description: 'You must be logged in to score.' });
-        return;
+      toast({
+        variant: 'destructive',
+        title: 'Error',
+        description: 'You must be logged in to score.',
+      });
+      return;
     }
-    
-    const submission = submissions.find(s => s.id === values.submissionId);
+
+    const submission = submissions.find((s) => s.id === values.submissionId);
     if (!submission) {
-        toast({ variant: 'destructive', title: 'Error', description: 'Invalid submission selected.' });
-        return;
+      toast({
+        variant: 'destructive',
+        title: 'Error',
+        description: 'Invalid submission selected.',
+      });
+      return;
     }
 
     setIsPending(true);
+
+    const totalScore =
+      values.depth +
+      values.relevance +
+      values.applicability +
+      values.authenticity +
+      values.packaging;
 
     const newScore: Score = {
       id: `score-${Date.now()}`,
       studentName: submission.studentName,
       taskName: submission.taskName,
-      score: values.score,
+      depth: values.depth,
+      relevance: values.relevance,
+      applicability: values.applicability,
+      authenticity: values.authenticity,
+      packaging: values.packaging,
+      total: totalScore,
       scorerName: user.name,
       date: new Date().toISOString(),
-      fileUrl: `/scores/${values.scoreFile[0].name}`, // Mock URL
     };
-    
-    // In a real app, this would be an API call to a database.
-    // We simulate it by updating the state.
+
     setTimeout(() => {
-        const updatedScores = [...scores, newScore];
-        setScores(updatedScores);
-        // Persist to localStorage to be reflected on the scores page
-        localStorage.setItem('scores', JSON.stringify(updatedScores));
+      const updatedScores = [...scores, newScore];
+      setScores(updatedScores);
+      localStorage.setItem('scores', JSON.stringify(updatedScores));
 
-        toast({
-            title: 'Score Submitted',
-            description: `Score of ${values.score} has been submitted for ${submission.studentName}.`,
-        });
-        form.reset();
-        setIsPending(false);
-        
-        // Manually dispatch a storage event to notify other tabs/pages
-        window.dispatchEvent(new Event('storage'));
+      toast({
+        title: 'Score Submitted',
+        description: `Score of ${totalScore}/50 has been submitted for ${submission.studentName}.`,
+      });
+      form.reset();
+      setIsPending(false);
 
+      window.dispatchEvent(new Event('storage'));
     }, 1000);
   };
+
+  const scoreCategories = [
+    { name: 'depth', label: 'Depth Score' },
+    { name: 'relevance', label: 'Relevance Score' },
+    { name: 'applicability', label: 'Applicability' },
+    { name: 'authenticity', label: 'Authenticity/Novelty' },
+    { name: 'packaging', label: 'Packaging' },
+  ] as const;
 
   return (
     <Form {...form}>
@@ -130,34 +161,25 @@ export function ScoringPortal({ initialSubmissions, initialScores }: ScoringPort
             </FormItem>
           )}
         />
-        
-        <FormField
-          control={form.control}
-          name="score"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Score (0-100)</FormLabel>
-              <FormControl>
-                <Input type="number" placeholder="e.g., 95" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
 
-        <FormField
-          control={form.control}
-          name="scoreFile"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Upload Score Excel File</FormLabel>
-              <FormControl>
-                <Input type="file" {...fileRef} accept=".xlsx, .xls, .csv" />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {scoreCategories.map((cat) => (
+            <FormField
+              key={cat.name}
+              control={form.control}
+              name={cat.name}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{cat.label} (0-10)</FormLabel>
+                  <FormControl>
+                    <Input type="number" min="0" max="10" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          ))}
+        </div>
 
         <Button type="submit" className="w-full" disabled={isPending}>
           {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
