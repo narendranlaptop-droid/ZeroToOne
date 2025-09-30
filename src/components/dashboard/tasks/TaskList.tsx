@@ -29,10 +29,11 @@ import {
 interface TaskListProps {
   tasks: Task[];
   onRemoveTask: (taskId: string) => void;
+  isAdmin: boolean;
 }
 
-export function TaskList({ tasks, onRemoveTask }: TaskListProps) {
-  useAuthRedirect('admin');
+export function TaskList({ tasks, onRemoveTask, isAdmin }: TaskListProps) {
+  useAuthRedirect();
   const { toast } = useToast();
 
   const handleRemove = (taskId: string, taskName: string) => {
@@ -52,7 +53,7 @@ export function TaskList({ tasks, onRemoveTask }: TaskListProps) {
             <TableHead>Name</TableHead>
             <TableHead>Deadline</TableHead>
             <TableHead>File</TableHead>
-            <TableHead className="text-right">Actions</TableHead>
+            {isAdmin && <TableHead className="text-right">Actions</TableHead>}
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -61,32 +62,34 @@ export function TaskList({ tasks, onRemoveTask }: TaskListProps) {
               <TableCell className="font-medium">{task.name}</TableCell>
               <TableCell>{task.deadline}</TableCell>
               <TableCell>{task.file}</TableCell>
-              <TableCell className="text-right">
-                <AlertDialog>
-                  <AlertDialogTrigger asChild>
-                    <Button variant="ghost" size="icon">
-                      <Trash2 className="h-4 w-4" />
-                      <span className="sr-only">Remove</span>
-                    </Button>
-                  </AlertDialogTrigger>
-                  <AlertDialogContent>
-                    <AlertDialogHeader>
-                      <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                      <AlertDialogDescription>
-                        This action cannot be undone. This will permanently delete the task &quot;{task.name}&quot;.
-                      </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                      <AlertDialogCancel>Cancel</AlertDialogCancel>
-                      <AlertDialogAction
-                        onClick={() => handleRemove(task.id, task.name)}
-                      >
-                        Continue
-                      </AlertDialogAction>
-                    </AlertDialogFooter>
-                  </AlertDialogContent>
-                </AlertDialog>
-              </TableCell>
+              {isAdmin && (
+                <TableCell className="text-right">
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <Button variant="ghost" size="icon">
+                        <Trash2 className="h-4 w-4" />
+                        <span className="sr-only">Remove</span>
+                      </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                        <AlertDialogDescription>
+                          This action cannot be undone. This will permanently delete the task &quot;{task.name}&quot;.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogAction
+                          onClick={() => handleRemove(task.id, task.name)}
+                        >
+                          Continue
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
+                </TableCell>
+              )}
             </TableRow>
           ))}
         </TableBody>

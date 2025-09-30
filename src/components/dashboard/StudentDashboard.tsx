@@ -13,7 +13,7 @@ const studentFeatures = [
     title: 'My Tasks',
     description: 'View tasks assigned by the admin.',
     icon: BookOpenCheck,
-    href: '#',
+    href: '/dashboard/tasks',
   },
   {
     title: 'Submit Work',
@@ -25,7 +25,7 @@ const studentFeatures = [
     title: 'Discussion Forum',
     description: 'Share feedback and opinions.',
     icon: MessageSquare,
-    href: '#',
+    href: '/dashboard/discussion',
   },
 ];
 

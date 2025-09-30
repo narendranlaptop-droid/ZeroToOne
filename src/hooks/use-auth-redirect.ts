@@ -2,8 +2,9 @@
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import type { UserRole } from "@/lib/types";
 
-export function useAuthRedirect(role?: "admin" | "student" | "scorer" | "operator") {
+export function useAuthRedirect(allowedRoles?: UserRole | UserRole[]) {
   const { user, loading } = useAuth();
   const router = useRouter();
 
@@ -12,11 +13,16 @@ export function useAuthRedirect(role?: "admin" | "student" | "scorer" | "operato
 
     if (!user) {
       router.push("/login");
-    } else if (role && user.role !== role) {
-      router.push("/dashboard"); // Or an unauthorized page
+      return;
     }
 
-  }, [user, loading, router, role]);
+    if (allowedRoles) {
+      const roles = Array.isArray(allowedRoles) ? allowedRoles : [allowedRoles];
+      if (!roles.includes(user.role)) {
+        router.push("/dashboard"); // Or an unauthorized page
+      }
+    }
+  }, [user, loading, router, allowedRoles]);
 
   return { user, loading };
 }
