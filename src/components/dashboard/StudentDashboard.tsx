@@ -19,7 +19,7 @@ const studentFeatures = [
     title: 'Submit Work',
     description: 'Upload your outputs and files.',
     icon: FileUp,
-    href: '#',
+    href: '/dashboard/submit',
   },
   {
     title: 'Discussion Forum',
