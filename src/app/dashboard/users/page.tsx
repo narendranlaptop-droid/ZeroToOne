@@ -12,8 +12,7 @@ import {
 } from '@/components/ui/card';
 import type { User } from '@/lib/types';
 import { useAuthRedirect } from '@/hooks/use-auth-redirect';
-import { collection, onSnapshot, query, where } from 'firebase/firestore';
-import { db } from '@/lib/firebase';
+import { users as initialUsers } from '@/lib/users';
 import { Skeleton } from '@/components/ui/skeleton';
 
 export default function UsersPage() {
@@ -22,17 +21,11 @@ export default function UsersPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const q = query(collection(db, 'users'), where('role', '==', 'student'));
-    const unsubscribe = onSnapshot(q, (querySnapshot) => {
-      const studentUsers: User[] = [];
-      querySnapshot.forEach((doc) => {
-        studentUsers.push({ id: doc.id, ...doc.data() } as User);
-      });
-      setUsers(studentUsers);
-      setLoading(false);
-    });
-
-    return () => unsubscribe();
+    // For demonstration, we'll use the static list of users.
+    // In a real application, this would fetch from a live database.
+    const studentUsers = initialUsers.filter(user => user.role === 'student');
+    setUsers(studentUsers);
+    setLoading(false);
   }, []);
 
   if (loading) {
