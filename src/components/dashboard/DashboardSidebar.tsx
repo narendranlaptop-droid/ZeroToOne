@@ -7,7 +7,6 @@ import {
   FileUp,
   LogOut,
   MessageSquare,
-  Mountain,
   Star,
   Users,
   LayoutDashboard,
@@ -60,7 +59,9 @@ export function DashboardSidebar() {
         <div className="flex h-full flex-col justify-between">
           <div className="space-y-4">
             <div className="flex items-center gap-2 h-10">
-                <Mountain className="h-6 w-6" />
+                <div className="flex items-center justify-center rounded-md bg-primary p-2 h-10 w-10">
+                    <span className="text-sm font-bold text-primary-foreground">ZTO</span>
+                </div>
                 <span className="font-semibold text-lg">ZeroToOne</span>
             </div>
             <div className="space-y-2">
@@ -80,7 +81,9 @@ export function DashboardSidebar() {
   return (
     <aside className="w-64 flex-shrink-0 border-r bg-secondary/40 p-4 flex flex-col">
       <div className="flex items-center gap-2 mb-8">
-        <Mountain className="h-6 w-6 text-primary" />
+        <div className="flex items-center justify-center rounded-md bg-primary p-2 h-10 w-10">
+            <span className="text-sm font-bold text-primary-foreground">ZTO</span>
+        </div>
         <span className="font-semibold text-lg text-primary">ZeroToOne</span>
       </div>
       <nav className="flex-1 space-y-2">

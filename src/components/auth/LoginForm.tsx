@@ -26,7 +26,7 @@ import {
 } from '@/components/ui/card';
 import { useAuth } from '@/context/AuthContext';
 import { useToast } from '@/hooks/use-toast';
-import { Mountain, ArrowLeft } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import { useState } from 'react';
 
 const formSchema = z.object({
@@ -72,7 +72,9 @@ export function LoginForm() {
     <Card className="w-full max-w-sm">
       <CardHeader className="text-center">
         <div className="flex justify-center items-center mb-4">
-            <Mountain className="h-8 w-8 text-primary" />
+            <div className="flex items-center justify-center rounded-md bg-primary p-2">
+                <span className="text-lg font-bold text-primary-foreground">ZeroToOne</span>
+            </div>
         </div>
         <CardTitle className="text-2xl font-bold">Welcome Back</CardTitle>
         <CardDescription>Enter your credentials to access your account.</CardDescription>
