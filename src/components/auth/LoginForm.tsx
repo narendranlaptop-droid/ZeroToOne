@@ -26,9 +26,8 @@ import {
 } from '@/components/ui/card';
 import { useAuth } from '@/context/AuthContext';
 import { useToast } from '@/hooks/use-toast';
-import { ArrowLeft, Star } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import { useState } from 'react';
-import { Separator } from '../ui/separator';
 
 const formSchema = z.object({
   email: z.string().email({ message: 'Invalid email address.' }),
@@ -75,13 +74,8 @@ export function LoginForm() {
 
   return (
     <Card className="w-full max-w-sm">
-      <CardHeader className="text-center">
-        <div className="flex justify-center items-center mb-4">
-            <div className="flex items-center justify-center rounded-md bg-primary p-2">
-                <span className="text-lg font-bold text-primary-foreground">ZeroToOne</span>
-            </div>
-        </div>
-        <CardTitle className="text-2xl font-bold">Welcome Back</CardTitle>
+      <CardHeader>
+        <CardTitle className="text-2xl font-bold">Login</CardTitle>
         <CardDescription>Enter your credentials to access your account.</CardDescription>
       </CardHeader>
       <CardContent>
@@ -113,22 +107,15 @@ export function LoginForm() {
                 </FormItem>
               )}
             />
-            {error && <p className="text-sm font-medium text-destructive">{error}</p>}
+             {error && <p className="text-sm font-medium text-destructive">{error}</p>}
             <Button type="submit" className="w-full">
               Login
             </Button>
+             <Button variant="outline" className="w-full" asChild>
+              <Link href="/dashboard/scoring">Scorer Portal</Link>
+            </Button>
           </form>
         </Form>
-        <Separator className="my-6" />
-        <div className="text-center">
-            <p className="text-sm text-muted-foreground mb-2">Are you a scorer?</p>
-            <Button variant="outline" className="w-full" asChild>
-                <Link href="/dashboard/scoring">
-                    <Star className="mr-2 h-4 w-4" />
-                    Scorer Portal
-                </Link>
-            </Button>
-        </div>
       </CardContent>
       <CardFooter className="flex justify-center">
         <Button variant="link" asChild>

@@ -16,10 +16,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning className={`${GeistSans.variable} ${GeistMono.variable}`}>
+    <html lang="en" suppressHydrationWarning>
       <head>
       </head>
-      <body className="font-body antialiased">
+      <body className={`${GeistSans.className} antialiased`}>
         <AuthProvider>
           {children}
           <Toaster />
