@@ -26,8 +26,9 @@ import {
 } from '@/components/ui/card';
 import { useAuth } from '@/context/AuthContext';
 import { useToast } from '@/hooks/use-toast';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Star } from 'lucide-react';
 import { useState } from 'react';
+import { Separator } from '../ui/separator';
 
 const formSchema = z.object({
   email: z.string().email({ message: 'Invalid email address.' }),
@@ -57,7 +58,11 @@ export function LoginForm() {
         title: 'Login Successful',
         description: `Welcome back, ${user.name}!`,
       });
-      router.push('/dashboard');
+      if (user.role === 'scorer') {
+        router.push('/dashboard/scoring');
+      } else {
+        router.push('/dashboard');
+      }
     } else {
       setError('Invalid User ID or Password');
       toast({
@@ -114,6 +119,16 @@ export function LoginForm() {
             </Button>
           </form>
         </Form>
+        <Separator className="my-6" />
+        <div className="text-center">
+            <p className="text-sm text-muted-foreground mb-2">Are you a scorer?</p>
+            <Button variant="outline" className="w-full" asChild>
+                <Link href="/dashboard/scoring">
+                    <Star className="mr-2 h-4 w-4" />
+                    Scorer Portal
+                </Link>
+            </Button>
+        </div>
       </CardContent>
       <CardFooter className="flex justify-center">
         <Button variant="link" asChild>

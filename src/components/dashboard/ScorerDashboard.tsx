@@ -13,13 +13,13 @@ const scorerFeatures = [
     title: 'View Submissions',
     description: 'See student submissions.',
     icon: FileUp,
-    href: '#',
+    href: '/dashboard/submissions',
   },
   {
     title: 'Provide Scores',
     description: 'Give scores to students.',
     icon: Star,
-    href: '#',
+    href: '/dashboard/scoring',
   },
 ];
 
