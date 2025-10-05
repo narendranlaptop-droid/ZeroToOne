@@ -11,32 +11,48 @@ import {
 } from '@/components/ui/card';
 import { useState, useEffect } from 'react';
 import type { Submission } from '@/lib/types';
-import { useAuthRedirect } from '@/hooks/use-auth-redirect';
+import { useAuth } from '@/context/AuthContext';
+import { useSearchParams } from 'next/navigation';
 
 export default function SubmissionsPage() {
-  useAuthRedirect();
+  const { user } = useAuth();
+  const searchParams = useSearchParams();
+  const studentFilter = searchParams.get('student');
   const [submissions, setSubmissions] = useState<Submission[]>(initialSubmissions);
 
   // This effect will re-fetch or update submissions if they are stored in localStorage
   useEffect(() => {
     const storedSubmissions = localStorage.getItem('submissions');
+    let allSubmissions = initialSubmissions;
     if (storedSubmissions) {
       try {
-        setSubmissions(JSON.parse(storedSubmissions));
+        allSubmissions = JSON.parse(storedSubmissions);
       } catch (e) {
         console.error("Failed to parse submissions from localStorage", e);
-        // If parsing fails, fall back to initial submissions
-        setSubmissions(initialSubmissions);
         localStorage.setItem('submissions', JSON.stringify(initialSubmissions));
       }
     } else {
         localStorage.setItem('submissions', JSON.stringify(initialSubmissions));
     }
+    
+    // If there is a student filter from the URL, apply it
+    // Otherwise, if the user is a student, filter by their name
+    const filterByName = studentFilter || (user?.role === 'student' ? user.name : null);
+    if (filterByName) {
+      setSubmissions(allSubmissions.filter(s => s.studentName === filterByName));
+    } else {
+      setSubmissions(allSubmissions);
+    }
 
     const handleStorageChange = () => {
-        const updatedSubmissions = localStorage.getItem('submissions');
-        if(updatedSubmissions) {
-            setSubmissions(JSON.parse(updatedSubmissions));
+        const updatedSubmissionsJSON = localStorage.getItem('submissions');
+        if(updatedSubmissionsJSON) {
+            const updatedSubmissions = JSON.parse(updatedSubmissionsJSON);
+             if (filterByName) {
+                setSubmissions(updatedSubmissions.filter(s => s.studentName === filterByName));
+            } else {
+                setSubmissions(updatedSubmissions);
+            }
         }
     }
 
@@ -45,7 +61,13 @@ export default function SubmissionsPage() {
     return () => {
         window.removeEventListener('storage', handleStorageChange);
     }
-  }, []);
+  }, [user, studentFilter]);
+
+  const isStudentView = user?.role === 'student' || !!studentFilter;
+  const title = isStudentView ? 'My Submissions' : 'All Submissions';
+  const description = isStudentView
+    ? 'A list of all work you have submitted.'
+    : 'A list of all work submitted by students.';
 
   return (
     <div>
@@ -53,13 +75,13 @@ export default function SubmissionsPage() {
         Submissions
       </h1>
       <p className="text-muted-foreground">
-        View and manage all student submissions.
+        {description}
       </p>
       <Card className="mt-8">
         <CardHeader>
-          <CardTitle>All Submissions</CardTitle>
+          <CardTitle>{title}</CardTitle>
           <CardDescription>
-            A list of all work submitted by students.
+            {description}
           </CardDescription>
         </CardHeader>
         <CardContent>

@@ -97,7 +97,9 @@ export function SubmitWorkForm({ tasks }: SubmitWorkFormProps) {
           title: 'Submission Successful',
           description: `Your work for "${selectedTask.name}" has been submitted.`,
         });
-        router.push('/dashboard/submissions');
+        // Redirect to submissions page, filtered by the current user's name
+        const searchParams = new URLSearchParams({ student: user.name });
+        router.push(`/dashboard/submissions?${searchParams.toString()}`);
       } catch (error) {
         toast({
           variant: 'destructive',
