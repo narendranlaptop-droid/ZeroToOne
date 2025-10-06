@@ -23,6 +23,7 @@ import { users } from '@/lib/users';
 import { tasks } from '@/lib/tasks';
 import { submissions } from '@/lib/submissions';
 import { scores } from '@/lib/scores';
+import { Button } from '@/components/ui/button';
 
 const navLinks: Record<string, Feature[]> = {
   admin: [
