@@ -128,7 +128,7 @@ export default function DashboardPage() {
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {features.map((feature) => (
           <Link href={feature.href} key={feature.title} className="group">
-            <Card className="h-full transition-all duration-300 ease-in-out hover:shadow-lg hover:-translate-y-1 hover:border-primary">
+            <Card className="h-full transition-all duration-300 ease-in-out hover:shadow-xl hover:-translate-y-2 hover:border-primary">
               <CardHeader className="flex flex-row items-center gap-4">
                 <div className="p-3 bg-muted rounded-full">
                   <feature.icon className="h-6 w-6 text-primary" />

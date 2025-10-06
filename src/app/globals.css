@@ -4,14 +4,14 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%; /* White */
-    --foreground: 222.2 47.4% 11.2%; /* Dark Gray */
+    --background: 210 40% 98%; /* Softer White */
+    --foreground: 224 71% 4%; /* Dark Navy Text */
     --card: 0 0% 100%;
-    --card-foreground: 222.2 47.4% 11.2%;
+    --card-foreground: 224 71% 4%;
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 47.4% 11.2%;
-    --primary: 201 83% 45%; /* Professional Blue */
-    --primary-foreground: 0 0% 100%; /* White */
+    --popover-foreground: 224 71% 4%;
+    --primary: 217 91% 60%; /* Slightly more vibrant Blue */
+    --primary-foreground: 0 0% 100%;
     --secondary: 210 40% 96.1%; /* Light Gray */
     --secondary-foreground: 222.2 47.4% 11.2%;
     --muted: 210 40% 96.1%;
@@ -22,14 +22,14 @@
     --destructive-foreground: 210 40% 98%;
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 201 83% 45%; /* Blue for focus rings */
+    --ring: 217 91% 60%; /* Blue for focus rings */
     --radius: 0.75rem;
 
-    --chart-1: 201 83% 45%;
-    --chart-2: 36 100% 50%;
-    --chart-3: 210 85% 55%;
+    --chart-1: 217 91% 60%;
+    --chart-2: 48 96% 53%;
+    --chart-3: 180 70% 45%;
     --chart-4: 300 80% 60%;
-    --chart-5: 180 70% 45%;
+    --chart-5: 36 100% 50%;
   }
 
   .dark {
@@ -39,7 +39,7 @@
     --card-foreground: 210 40% 98%;
     --popover: 224 71% 4%;
     --popover-foreground: 210 40% 98%;
-    --primary: 201 83% 55%; /* Lighter Professional Blue */
+    --primary: 217 91% 60%; 
     --primary-foreground: 0 0% 100%;
     --secondary: 215 28% 17%;
     --secondary-foreground: 210 40% 98%;
@@ -51,7 +51,7 @@
     --destructive-foreground: 210 40% 98%;
     --border: 215 28% 22%;
     --input: 215 28% 22%;
-    --ring: 201 83% 55%;
+    --ring: 217 91% 60%;
   }
 }
 
