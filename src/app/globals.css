@@ -5,53 +5,53 @@
 @layer base {
   :root {
     --background: 0 0% 100%; /* White */
-    --foreground: 0 0% 7%; /* Black/Dark Gray */
+    --foreground: 222.2 47.4% 11.2%; /* Dark Gray */
     --card: 0 0% 100%;
-    --card-foreground: 0 0% 7%;
+    --card-foreground: 222.2 47.4% 11.2%;
     --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 7%;
-    --primary: 36 100% 50%; /* Orange */
+    --popover-foreground: 222.2 47.4% 11.2%;
+    --primary: 201 83% 45%; /* Professional Blue */
     --primary-foreground: 0 0% 100%; /* White */
     --secondary: 210 40% 96.1%; /* Light Gray */
     --secondary-foreground: 222.2 47.4% 11.2%;
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 201 83% 45%; /* Blue */
-    --accent-foreground: 0 0% 100%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 36 100% 50%; /* Orange for focus rings */
+    --ring: 201 83% 45%; /* Blue for focus rings */
     --radius: 0.75rem;
 
-    --chart-1: 36 100% 50%;
-    --chart-2: 201 83% 45%;
+    --chart-1: 201 83% 45%;
+    --chart-2: 36 100% 50%;
     --chart-3: 210 85% 55%;
     --chart-4: 300 80% 60%;
     --chart-5: 180 70% 45%;
   }
 
   .dark {
-    --background: 0 0% 7%; /* Dark Gray/Black */
+    --background: 224 71% 4%; /* Dark Navy */
     --foreground: 210 40% 98%; /* White */
-    --card: 0 0% 11%;
+    --card: 224 71% 8%;
     --card-foreground: 210 40% 98%;
-    --popover: 0 0% 7%;
+    --popover: 224 71% 4%;
     --popover-foreground: 210 40% 98%;
-    --primary: 36 100% 50%; /* Orange */
+    --primary: 201 83% 55%; /* Lighter Professional Blue */
     --primary-foreground: 0 0% 100%;
-    --secondary: 0 0% 15%;
+    --secondary: 215 28% 17%;
     --secondary-foreground: 210 40% 98%;
-    --muted: 0 0% 15%;
+    --muted: 215 28% 17%;
     --muted-foreground: 217.9 10.6% 64.9%;
-    --accent: 201 83% 55%; /* Lighter Blue */
-    --accent-foreground: 0 0% 7%;
+    --accent: 215 28% 17%;
+    --accent-foreground: 210 40% 98%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
-    --border: 0 0% 20%;
-    --input: 0 0% 20%;
-    --ring: 36 100% 50%;
+    --border: 215 28% 22%;
+    --input: 215 28% 22%;
+    --ring: 201 83% 55%;
   }
 }
 
