@@ -46,7 +46,7 @@ export function UserTable({ users, onRemoveUser }: UserTableProps) {
         <TableBody>
           {users.map((user) => (
             <TableRow key={user.id}>
-              <TableCell className="font-medium truncate max-w-24">{user.id}</TableCell>
+              <TableCell className="font-medium">{user.id}</TableCell>
               <TableCell>{user.name}</TableCell>
               <TableCell>{user.email}</TableCell>
               <TableCell className="text-right">
