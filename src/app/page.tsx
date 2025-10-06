@@ -3,6 +3,7 @@ import { Footer } from '@/components/layout/Footer';
 import { Hero } from '@/components/landing/Hero';
 import { Objective } from '@/components/landing/Objective';
 import { WeeklySchedule } from '@/components/landing/WeeklySchedule';
+import { ProgramPlaybook } from '@/components/landing/ProgramPlaybook';
 
 export default function Home() {
   return (
@@ -11,6 +12,7 @@ export default function Home() {
       <main className="flex-1">
         <Hero />
         <Objective />
+        <ProgramPlaybook />
         <WeeklySchedule />
       </main>
       <Footer />
