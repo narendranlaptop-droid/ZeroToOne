@@ -16,12 +16,60 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Slider } from '@/components/ui/slider';
 import { Progress } from '@/components/ui/progress';
+import { Input } from '../ui/input';
+import { useForm, SubmitHandler } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { handleOnboardingSubmission } from './actions';
+import { useToast } from '@/hooks/use-toast';
+import { Loader2 } from 'lucide-react';
+
+const formSchema = z.object({
+  name: z.string().min(1, 'Name is required'),
+  employeeId: z.string().min(1, 'Employee ID is required'),
+  email: z.string().email('Invalid email address'),
+});
+
+type OnboardingFormValues = z.infer<typeof formSchema>;
 
 export function ProgramOnboarding() {
   const [step, setStep] = useState(0);
   const [isVoluntary, setIsVoluntary] = useState(false);
+  const { toast } = useToast();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const form = useForm<OnboardingFormValues>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      name: '',
+      employeeId: '',
+      email: '',
+    },
+  });
+
   const totalSteps = 6;
   const progress = (step / (totalSteps - 1)) * 100;
+  
+  const onSubmit: SubmitHandler<OnboardingFormValues> = async (data) => {
+    setIsSubmitting(true);
+    try {
+      await handleOnboardingSubmission(data);
+      toast({
+        title: 'Information Saved',
+        description: "Your details have been added to the student list.",
+      });
+      setStep(step + 1);
+    } catch (error) {
+       toast({
+        variant: 'destructive',
+        title: 'Submission Failed',
+        description: 'There was an error saving your information.',
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
 
   const renderStep = () => {
     switch (step) {
@@ -79,27 +127,28 @@ export function ProgramOnboarding() {
             </CardHeader>
         )
       case 4:
-        const phases = [
-            { theme: 'The Inner Lens', experience: 'Reflection & Mindset', outcome: 'Awareness' },
-            { theme: 'Thinking Like a Builder', experience: 'Systems Thinking', outcome: 'Clarity' },
-            { theme: 'From Ideas to Execution', experience: 'Hands-on Creation', outcome: 'Capability' },
-            { theme: 'Versioning & Reflection', experience: 'Continuous Learning', outcome: 'Growth Habit' },
-        ];
         return (
             <CardHeader>
-                <CardTitle>How This Journey Flows</CardTitle>
-                <CardDescription>A high-level overview of the program's design.</CardDescription>
+                <CardTitle>Your Information</CardTitle>
+                <CardDescription>Please provide your details. This will be added to the student roster for the program administrator.</CardDescription>
                 <CardContent className="pt-6">
-                    <div className="relative">
-                        <div className="absolute left-4 top-0 h-full w-0.5 bg-border" />
-                        {phases.map((phase, index) => (
-                            <div key={index} className="relative pl-10 mb-8 last:mb-0">
-                                <div className="absolute left-4 top-1 h-3 w-3 -translate-x-1/2 rounded-full bg-primary" />
-                                <p className="font-semibold text-primary">Phase {index + 1}: {phase.theme}</p>
-                                <p className="text-sm text-muted-foreground">{phase.experience} → <span className="font-medium text-foreground">{phase.outcome}</span></p>
-                            </div>
-                        ))}
-                    </div>
+                   <form id="onboardingForm" onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                        <div>
+                            <Label htmlFor="name">Full Name</Label>
+                            <Input id="name" {...form.register('name')} />
+                            {form.formState.errors.name && <p className="text-sm text-destructive mt-1">{form.formState.errors.name.message}</p>}
+                        </div>
+                         <div>
+                            <Label htmlFor="employeeId">Employee ID</Label>
+                            <Input id="employeeId" {...form.register('employeeId')} />
+                            {form.formState.errors.employeeId && <p className="text-sm text-destructive mt-1">{form.formState.errors.employeeId.message}</p>}
+                        </div>
+                        <div>
+                            <Label htmlFor="email">Email</Label>
+                            <Input id="email" type="email" {...form.register('email')} />
+                            {form.formState.errors.email && <p className="text-sm text-destructive mt-1">{form.formState.errors.email.message}</p>}
+                        </div>
+                   </form>
                 </CardContent>
             </CardHeader>
         );
@@ -171,9 +220,15 @@ export function ProgramOnboarding() {
                   I'm Ready to Begin <Rocket className="ml-2" />
                 </Button>
               )}
-              {step > 0 && step < 5 && (
+              {step > 0 && step < 4 && (
                  <Button onClick={() => setStep(step + 1)} disabled={step === 2 && !isVoluntary}>
                   Continue <ArrowRight className="ml-2" />
+                </Button>
+              )}
+               {step === 4 && (
+                 <Button type="submit" form="onboardingForm" disabled={isSubmitting}>
+                   {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                  Save and Continue <ArrowRight className="ml-2" />
                 </Button>
               )}
                {step === 5 && (

@@ -23,9 +23,30 @@ export default function UsersPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const studentUsers = initialUsers.filter(user => user.role === 'student');
-    setUsers(studentUsers);
-    setLoading(false);
+    // Function to load users from both static import and localStorage
+    const loadUsers = () => {
+      const studentUsers = initialUsers.filter(user => user.role === 'student');
+      const storedUsersRaw = localStorage.getItem('onboarded_users');
+      const storedUsers = storedUsersRaw ? JSON.parse(storedUsersRaw) : [];
+      
+      // Combine and remove duplicates, giving preference to stored users
+      const combinedUsers = [...storedUsers, ...studentUsers];
+      const uniqueUsers = combinedUsers.filter(
+        (user, index, self) => index === self.findIndex((u) => u.id === user.id || u.email === user.email)
+      );
+
+      setUsers(uniqueUsers);
+      setLoading(false);
+    }
+    
+    loadUsers();
+    
+    // Listen for storage changes to update the user list in real-time
+    window.addEventListener('storage', loadUsers);
+
+    return () => {
+      window.removeEventListener('storage', loadUsers);
+    }
   }, []);
 
   const addUser = (newUser: Omit<User, 'id' | 'role'>) => {
@@ -34,7 +55,15 @@ export default function UsersPage() {
       id: `student-${Date.now()}`,
       role: 'student',
     };
-    setUsers(prevUsers => [userWithId, ...prevUsers]);
+    
+    const updatedUsers = [userWithId, ...users];
+    setUsers(updatedUsers);
+
+    // Also update localStorage for persistence
+    const storedUsersRaw = localStorage.getItem('onboarded_users');
+    const storedUsers = storedUsersRaw ? JSON.parse(storedUsersRaw) : [];
+    localStorage.setItem('onboarded_users', JSON.stringify([...storedUsers, userWithId]));
+
     toast({
       title: 'Student Added',
       description: `Student "${newUser.name}" has been added.`,
@@ -43,7 +72,18 @@ export default function UsersPage() {
 
   const removeUser = (userId: string) => {
     const userToRemove = users.find(user => user.id === userId);
-    setUsers(prevUsers => prevUsers.filter(user => user.id !== userId));
+    const updatedUsers = users.filter(user => user.id !== userId);
+    setUsers(updatedUsers);
+
+     // Also update localStorage
+    const storedUsersRaw = localStorage.getItem('onboarded_users');
+    if (storedUsersRaw) {
+        const storedUsers = JSON.parse(storedUsersRaw);
+        const updatedStoredUsers = storedUsers.filter((u: User) => u.id !== userId);
+        localStorage.setItem('onboarded_users', JSON.stringify(updatedStoredUsers));
+    }
+
+
      if(userToRemove) {
       toast({
         variant: 'destructive',

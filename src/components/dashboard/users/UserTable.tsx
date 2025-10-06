@@ -38,6 +38,7 @@ export function UserTable({ users, onRemoveUser }: UserTableProps) {
         <TableHeader>
           <TableRow>
             <TableHead>ID</TableHead>
+            <TableHead>Employee ID</TableHead>
             <TableHead>Name</TableHead>
             <TableHead>Email</TableHead>
             <TableHead className="text-right">Actions</TableHead>
@@ -47,6 +48,7 @@ export function UserTable({ users, onRemoveUser }: UserTableProps) {
           {users.map((user) => (
             <TableRow key={user.id}>
               <TableCell className="font-medium">{user.id}</TableCell>
+              <TableCell>{user.employeeId || 'N/A'}</TableCell>
               <TableCell>{user.name}</TableCell>
               <TableCell>{user.email}</TableCell>
               <TableCell className="text-right">
