@@ -18,6 +18,7 @@ import {
   MessageSquare,
   Star,
   ArrowRight,
+  CheckCircle,
 } from 'lucide-react';
 import { users } from '@/lib/users';
 import { tasks } from '@/lib/tasks';
@@ -60,6 +61,7 @@ export default function DashboardPage() {
   
   const studentCount = users.filter(u => u.role === 'student').length;
   const recentSubmissions = submissions.slice(0, 3);
+  const finishedTasksCount = new Set(scores.map(score => score.taskName)).size;
 
 
   if (loading || !user) {
@@ -92,6 +94,7 @@ export default function DashboardPage() {
   const stats = [
     { title: 'Total Students', value: studentCount, icon: Users },
     { title: 'Active Tasks', value: tasks.length, icon: BookOpenCheck },
+    { title: 'Finished Tasks', value: finishedTasksCount, icon: CheckCircle },
     { title: 'Total Submissions', value: submissions.length, icon: FileUp },
   ];
 
@@ -107,7 +110,7 @@ export default function DashboardPage() {
       </div>
 
       {user.role === 'admin' && (
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
           {stats.map((stat) => (
             <Card key={stat.title}>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
