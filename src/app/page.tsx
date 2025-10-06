@@ -4,6 +4,7 @@ import { Hero } from '@/components/landing/Hero';
 import { Objective } from '@/components/landing/Objective';
 import { WeeklySchedule } from '@/components/landing/WeeklySchedule';
 import { ProgramPlaybook } from '@/components/landing/ProgramPlaybook';
+import { ProgramOnboarding } from '@/components/landing/ProgramOnboarding';
 
 export default function Home() {
   return (
@@ -13,6 +14,7 @@ export default function Home() {
         <Hero />
         <Objective />
         <ProgramPlaybook />
+        <ProgramOnboarding />
         <WeeklySchedule />
       </main>
       <Footer />
