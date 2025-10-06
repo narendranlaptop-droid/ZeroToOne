@@ -1,3 +1,5 @@
+'use client';
+
 import { CustomizeUI } from '@/components/dashboard/CustomizeUI';
 import {
   Card,
