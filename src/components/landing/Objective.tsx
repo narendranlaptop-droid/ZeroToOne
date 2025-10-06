@@ -2,10 +2,10 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 export function Objective() {
   return (
-    <section className="w-full py-12 md:py-24 lg:py-32 bg-gray-100 dark:bg-gray-800">
+    <section className="w-full py-12 md:py-24 lg:py-32 bg-secondary">
       <div className="container px-4 md:px-6">
         <div className="flex justify-center">
-          <Card className="max-w-3xl">
+          <Card className="max-w-3xl shadow-lg">
             <CardHeader>
               <CardTitle className="text-center text-3xl font-bold">Objective</CardTitle>
             </CardHeader>

@@ -154,7 +154,7 @@ export function ProgramOnboarding() {
   };
 
   return (
-    <section className="w-full py-12 md:py-24 lg:py-32 bg-gray-100 dark:bg-gray-800">
+    <section className="w-full py-12 md:py-24 lg:py-32 bg-secondary">
       <div className="container px-4 md:px-6">
         <Card className="max-w-4xl mx-auto shadow-2xl">
           {step > 0 && <Progress value={progress} className="w-full h-1" />}

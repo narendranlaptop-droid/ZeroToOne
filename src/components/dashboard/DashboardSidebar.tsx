@@ -64,10 +64,10 @@ export function DashboardSidebar() {
   const links = navLinks[user.role] || [];
 
   return (
-    <aside className="w-64 flex-shrink-0 bg-card text-card-foreground flex flex-col">
+    <aside className="w-64 flex-shrink-0 bg-card text-card-foreground flex flex-col border-r">
       <div className="h-16 flex items-center justify-center font-bold text-xl border-b">
         <Link href="/">
-         <span className="text-xl">ZeroToOne</span>
+         <span className="text-xl font-bold">ZeroToOne</span>
         </Link>
       </div>
       <nav className="flex-1 px-2 py-4 space-y-2">
@@ -77,8 +77,8 @@ export function DashboardSidebar() {
             href={link.href}
             className={`flex items-center px-4 py-2 text-sm rounded-md transition-colors ${
               pathname === link.href
-                ? 'bg-muted text-foreground'
-                : 'text-muted-foreground hover:bg-muted/50 hover:text-foreground'
+                ? 'bg-primary text-primary-foreground'
+                : 'text-muted-foreground hover:bg-muted hover:text-foreground'
             }`}
           >
             <link.icon className="h-5 w-5 mr-3" />
@@ -90,7 +90,7 @@ export function DashboardSidebar() {
         <Button
           onClick={handleLogout}
           variant="ghost"
-          className="w-full justify-start text-muted-foreground hover:bg-muted/50 hover:text-foreground"
+          className="w-full justify-start text-muted-foreground hover:bg-muted hover:text-foreground"
         >
           <LogOut className="h-5 w-5 mr-3" />
           Logout
