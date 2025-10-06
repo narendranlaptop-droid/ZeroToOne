@@ -20,7 +20,7 @@ export function ProgramPlaybook() {
     'Mapping Helps in Making Sense',
     'Everything Is a Hypothesis',
     'Ask Questions Relentlessly',
-    'Know the BPF (Big Picture First)',
+    'Know the BPF (Business Process Flow)',
     'Go Slow to Go Fast',
     'Embrace V1s',
     'Data Thinking',

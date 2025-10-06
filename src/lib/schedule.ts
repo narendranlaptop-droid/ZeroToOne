@@ -40,7 +40,7 @@ export const weeklySchedule: Week[] = [
     id: 'week-4',
     title: 'Week 4: Problem-Solving Tools',
     topics: [
-      'Nothing makes sense till you know the BPF',
+      'Nothing makes sense till you know the BPF (Business Process Flow)',
       'Version Controlling',
       'The V1s are supposed to suck',
       'Shooting blind Vs Doing pDNA',
