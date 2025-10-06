@@ -52,9 +52,9 @@ export function CustomizeUI() {
   }
 
   return (
-    <div className="grid md:grid-cols-2 gap-8">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="grid md:grid-cols-2 gap-8">
+        <div>
           <FormField
             control={form.control}
             name="primaryColor"
@@ -111,8 +111,7 @@ export function CustomizeUI() {
             {isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
             Generate Theme
           </Button>
-        </form>
-      </Form>
+          </div>
       <div>
         <FormLabel>Generated CSS</FormLabel>
         <Textarea
@@ -125,6 +124,7 @@ export function CustomizeUI() {
             Copy and paste this code into your global CSS file to apply the new theme.
         </p>
       </div>
-    </div>
+        </form>
+      </Form>
   );
 }
