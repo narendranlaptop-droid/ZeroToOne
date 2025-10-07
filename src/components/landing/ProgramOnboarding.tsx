@@ -23,6 +23,7 @@ import { z } from 'zod';
 import { handleOnboardingSubmission } from './actions';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 const formSchema = z.object({
   name: z.string().min(1, 'Name is required'),
@@ -37,6 +38,7 @@ export function ProgramOnboarding() {
   const [isVoluntary, setIsVoluntary] = useState(false);
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const router = useRouter();
 
   const form = useForm<OnboardingFormValues>({
     resolver: zodResolver(formSchema),
@@ -237,7 +239,7 @@ export function ProgramOnboarding() {
                 </Button>
               )}
               {step === totalSteps && (
-                <Button className="w-full md:w-auto mx-auto" size="lg" onClick={() => setStep(0)}>
+                <Button className="w-full md:w-auto mx-auto" size="lg" onClick={() => router.push('/login')}>
                   Start Day 0 <Rocket className="ml-2" />
                 </Button>
               )}
