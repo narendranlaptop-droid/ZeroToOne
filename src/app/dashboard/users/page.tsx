@@ -20,28 +20,27 @@ export default function UsersPage() {
   useAuthRedirect('admin');
   const { toast } = useToast();
   const [users, setUsers] = useState<User[]>([]);
+  const [interestedStudents, setInterestedStudents] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Function to load users from both static import and localStorage
     const loadUsers = () => {
       const studentUsers = initialUsers.filter(user => user.role === 'student');
       const storedUsersRaw = localStorage.getItem('onboarded_users');
       const storedUsers = storedUsersRaw ? JSON.parse(storedUsersRaw) : [];
       
-      // Combine and remove duplicates, giving preference to stored users
       const combinedUsers = [...storedUsers, ...studentUsers];
       const uniqueUsers = combinedUsers.filter(
         (user, index, self) => index === self.findIndex((u) => u.id === user.id || u.email === user.email)
       );
 
       setUsers(uniqueUsers);
+      setInterestedStudents(storedUsers);
       setLoading(false);
     }
     
     loadUsers();
     
-    // Listen for storage changes to update the user list in real-time
     window.addEventListener('storage', loadUsers);
 
     return () => {
@@ -59,7 +58,9 @@ export default function UsersPage() {
     const updatedUsers = [userWithId, ...users];
     setUsers(updatedUsers);
 
-    // Also update localStorage for persistence
+    const updatedInterested = [userWithId, ...interestedStudents];
+    setInterestedStudents(updatedInterested);
+
     const storedUsersRaw = localStorage.getItem('onboarded_users');
     const storedUsers = storedUsersRaw ? JSON.parse(storedUsersRaw) : [];
     localStorage.setItem('onboarded_users', JSON.stringify([...storedUsers, userWithId]));
@@ -75,14 +76,15 @@ export default function UsersPage() {
     const updatedUsers = users.filter(user => user.id !== userId);
     setUsers(updatedUsers);
 
-     // Also update localStorage
+    const updatedInterested = interestedStudents.filter(user => user.id !== userId);
+    setInterestedStudents(updatedInterested);
+
     const storedUsersRaw = localStorage.getItem('onboarded_users');
     if (storedUsersRaw) {
         const storedUsers = JSON.parse(storedUsersRaw);
         const updatedStoredUsers = storedUsers.filter((u: User) => u.id !== userId);
         localStorage.setItem('onboarded_users', JSON.stringify(updatedStoredUsers));
     }
-
 
      if(userToRemove) {
       toast({
@@ -143,33 +145,44 @@ export default function UsersPage() {
       <p className="text-muted-foreground">
         Add, view, and remove student users.
       </p>
-      <div className="grid gap-8 mt-8 lg:grid-cols-3">
-        <div className="lg:col-span-1">
+      <div className="grid gap-8 mt-8">
+        <Card>
+          <CardHeader>
+            <CardTitle>Add New Student</CardTitle>
+            <CardDescription>
+              Fill out the form to manually add a new student.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <UserForm onAddUser={addUser} />
+          </CardContent>
+        </Card>
+        
+        {interestedStudents.length > 0 && (
           <Card>
             <CardHeader>
-              <CardTitle>Add New Student</CardTitle>
+              <CardTitle>Interested Students</CardTitle>
               <CardDescription>
-                Fill out the form to add a new student.
+                Students who have shown interest by completing the onboarding form.
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <UserForm onAddUser={addUser} />
+              <UserTable users={interestedStudents} onRemoveUser={removeUser} />
             </CardContent>
           </Card>
-        </div>
-        <div className="lg:col-span-2">
-          <Card>
-            <CardHeader>
-              <CardTitle>Student List</CardTitle>
-              <CardDescription>
-                A list of all students in the system.
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <UserTable users={users} onRemoveUser={removeUser} />
-            </CardContent>
-          </Card>
-        </div>
+        )}
+
+        <Card>
+          <CardHeader>
+            <CardTitle>All Students</CardTitle>
+            <CardDescription>
+              A complete list of all students, including static and newly added ones.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <UserTable users={users} onRemoveUser={removeUser} />
+          </CardContent>
+        </Card>
       </div>
     </div>
   );
