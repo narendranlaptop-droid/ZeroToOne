@@ -19,12 +19,14 @@ import {
   Star,
   ArrowRight,
   CheckCircle,
+  UserPlus,
 } from 'lucide-react';
 import { users } from '@/lib/users';
 import { tasks } from '@/lib/tasks';
 import { submissions } from '@/lib/submissions';
 import { scores } from '@/lib/scores';
 import { Button } from '@/components/ui/button';
+import { useEffect, useState } from 'react';
 
 const navLinks: Record<string, Feature[]> = {
   admin: [
@@ -58,7 +60,16 @@ type Feature = {
 
 export default function DashboardPage() {
   const { user, loading } = useAuthRedirect();
+  const [interestedStudentsCount, setInterestedStudentsCount] = useState(0);
   
+  useEffect(() => {
+    const storedUsersRaw = localStorage.getItem('onboarded_users');
+    if (storedUsersRaw) {
+      const storedUsers = JSON.parse(storedUsersRaw);
+      setInterestedStudentsCount(storedUsers.length);
+    }
+  }, []);
+
   const studentCount = users.filter(u => u.role === 'student').length;
   const recentSubmissions = submissions.slice(0, 3);
   const finishedTasksCount = new Set(scores.map(score => score.taskName)).size;
@@ -93,7 +104,7 @@ export default function DashboardPage() {
 
   const stats = [
     { title: 'Total Students', value: studentCount, icon: Users },
-    { title: 'Active Tasks', value: tasks.length, icon: BookOpenCheck },
+    { title: 'Interested Students', value: interestedStudentsCount, icon: UserPlus },
     { title: 'Finished Tasks', value: finishedTasksCount, icon: CheckCircle },
     { title: 'Total Submissions', value: submissions.length, icon: FileUp },
   ];
