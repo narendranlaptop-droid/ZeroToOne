@@ -103,10 +103,10 @@ export default function DashboardPage() {
   }
 
   const stats = [
-    { title: 'Total Students', value: studentCount, icon: Users },
-    { title: 'Interested Students', value: interestedStudentsCount, icon: UserPlus },
+    { title: 'Total Students', value: studentCount, icon: Users, href: '/dashboard/users' },
+    { title: 'Interested Students', value: interestedStudentsCount, icon: UserPlus, href: '/dashboard/users' },
     { title: 'Finished Tasks', value: finishedTasksCount, icon: CheckCircle },
-    { title: 'Total Submissions', value: submissions.length, icon: FileUp },
+    { title: 'Total Submissions', value: submissions.length, icon: FileUp, href: '/dashboard/submissions' },
   ];
 
   return (
@@ -122,17 +122,28 @@ export default function DashboardPage() {
 
       {user.role === 'admin' && (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-          {stats.map((stat) => (
-            <Card key={stat.title}>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">{stat.title}</CardTitle>
-                <stat.icon className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{stat.value}</div>
-              </CardContent>
-            </Card>
-          ))}
+          {stats.map((stat) => {
+            const statCard = (
+               <Card key={stat.title} className="transition-all duration-300 ease-in-out hover:shadow-lg hover:-translate-y-1">
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium">{stat.title}</CardTitle>
+                  <stat.icon className="h-4 w-4 text-muted-foreground" />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold">{stat.value}</div>
+                </CardContent>
+              </Card>
+            );
+
+            if (stat.href) {
+                return (
+                    <Link href={stat.href} key={stat.title} className="group">
+                        {statCard}
+                    </Link>
+                )
+            }
+            return statCard;
+          })}
         </div>
       )}
 
