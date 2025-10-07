@@ -22,6 +22,7 @@ const formSchema = z.object({
   name: z.string().min(1, { message: 'Name is required.' }),
   email: z.string().email({ message: 'Invalid email address.' }),
   password: z.string().min(6, { message: 'Password must be at least 6 characters.' }),
+  employeeId: z.string().min(1, { message: 'Employee ID is required.' }),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -39,6 +40,7 @@ export function UserForm({ onAddUser }: UserFormProps) {
       name: '',
       email: '',
       password: '',
+      employeeId: '',
     },
   });
 
@@ -86,6 +88,19 @@ export function UserForm({ onAddUser }: UserFormProps) {
               <FormLabel>Password</FormLabel>
               <FormControl>
                 <Input type="password" placeholder="••••••••" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="employeeId"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Employee ID</FormLabel>
+              <FormControl>
+                <Input placeholder="e.g., 17250" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

@@ -3,31 +3,38 @@
 import type { User } from '@/lib/types';
 import { users as initialUsers } from '@/lib/users';
 
-// In a real app, this would write to a database.
-// For this demo, we can't directly modify the imported `initialUsers`
-// so we'll simulate persistence. This is not a production-ready approach.
-// A proper solution would use a database (e.g. Firestore).
+const STARTING_EMPLOYEE_ID = 17250;
+
+function getNextEmployeeId(existingUsers: User[]): string {
+  const studentUsers = existingUsers.filter(u => u.role === 'student' && !isNaN(parseInt(u.employeeId)));
+  if (studentUsers.length === 0) {
+    return String(STARTING_EMPLOYEE_ID);
+  }
+
+  const maxId = Math.max(...studentUsers.map(u => parseInt(u.employeeId, 10)));
+  return String(maxId + 1);
+}
 
 export async function handleOnboardingSubmission(
-  userData: Pick<User, 'name' | 'email' | 'employeeId'>
+  userData: Pick<User, 'name' | 'email'>
 ): Promise<User> {
   console.log('New onboarding submission received on server:', userData);
+
+  // In a real app, you would fetch all users from a database.
+  // For now, we use the static list and any stored users.
+  const storedUsersRaw = null; // This would come from a persistent store in a real app
+  const storedUsers = storedUsersRaw ? JSON.parse(storedUsersRaw) : [];
+  const allUsers = [...initialUsers, ...storedUsers];
+  
+  const nextEmployeeId = getNextEmployeeId(allUsers);
 
   const newUser: User = {
     id: `student-${Date.now()}`,
     ...userData,
+    employeeId: nextEmployeeId,
     role: 'student',
-    // In a real app, you would securely generate a password or use a passwordless system
     password: 'password123',
   };
-
-  // This is where you would typically save the user to your database.
-  // For example, with Firestore: await addUserToFirestore(newUser);
-  
-  // Since we can't modify the static users.ts file at runtime,
-  // we're returning the new user object. The client-side will need to handle
-  // how to reflect this new user in the UI, potentially via client-side state
-  // or by re-fetching data if a real database were used.
 
   return newUser;
 }

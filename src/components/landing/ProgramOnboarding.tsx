@@ -28,7 +28,6 @@ import type { User } from '@/lib/types';
 
 const formSchema = z.object({
   name: z.string().min(1, 'Name is required'),
-  employeeId: z.string().min(1, 'Employee ID is required'),
   email: z.string().email('Invalid email address'),
 });
 
@@ -45,7 +44,6 @@ export function ProgramOnboarding() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: '',
-      employeeId: '',
       email: '',
     },
   });
@@ -58,7 +56,6 @@ export function ProgramOnboarding() {
     try {
       const newUser = await handleOnboardingSubmission(data);
       
-      // Save the new user to localStorage
       const storedUsersRaw = localStorage.getItem('onboarded_users');
       const storedUsers = storedUsersRaw ? JSON.parse(storedUsersRaw) : [];
       localStorage.setItem('onboarded_users', JSON.stringify([...storedUsers, newUser]));
@@ -146,11 +143,6 @@ export function ProgramOnboarding() {
                             <Label htmlFor="name">Full Name</Label>
                             <Input id="name" {...form.register('name')} />
                             {form.formState.errors.name && <p className="text-sm text-destructive mt-1">{form.formState.errors.name.message}</p>}
-                        </div>
-                         <div>
-                            <Label htmlFor="employeeId">Employee ID</Label>
-                            <Input id="employeeId" {...form.register('employeeId')} />
-                            {form.formState.errors.employeeId && <p className="text-sm text-destructive mt-1">{form.formState.errors.employeeId.message}</p>}
                         </div>
                         <div>
                             <Label htmlFor="email">Email</Label>

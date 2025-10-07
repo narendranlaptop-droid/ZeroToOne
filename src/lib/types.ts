@@ -6,7 +6,7 @@ export type User = {
   email: string;
   password?: string; // Should not be sent to client
   role: UserRole;
-  employeeId?: string;
+  employeeId: string;
 };
 
 export type Task = {
