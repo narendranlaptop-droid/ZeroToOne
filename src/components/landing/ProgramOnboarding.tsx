@@ -24,6 +24,7 @@ import { handleOnboardingSubmission } from './actions';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import type { User } from '@/lib/types';
 
 const formSchema = z.object({
   name: z.string().min(1, 'Name is required'),
@@ -55,7 +56,13 @@ export function ProgramOnboarding() {
   const onSubmit: SubmitHandler<OnboardingFormValues> = async (data) => {
     setIsSubmitting(true);
     try {
-      await handleOnboardingSubmission(data);
+      const newUser = await handleOnboardingSubmission(data);
+      
+      // Save the new user to localStorage
+      const storedUsersRaw = localStorage.getItem('onboarded_users');
+      const storedUsers = storedUsersRaw ? JSON.parse(storedUsersRaw) : [];
+      localStorage.setItem('onboarded_users', JSON.stringify([...storedUsers, newUser]));
+
       toast({
         title: 'Information Saved',
         description: "Your details have been added to the student list.",
@@ -240,7 +247,7 @@ export function ProgramOnboarding() {
               )}
               {step === totalSteps && (
                 <Button className="w-full md:w-auto mx-auto" size="lg" onClick={() => router.push('/login')}>
-                  Start Day 0 <Rocket className="ml-2" />
+                  Go to Login <ArrowRight className="ml-2" />
                 </Button>
               )}
             </CardFooter>
