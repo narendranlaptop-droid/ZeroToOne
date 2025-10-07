@@ -10,7 +10,6 @@ import {
   Star,
   Users,
   LayoutDashboard,
-  Palette,
 } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { Button } from '@/components/ui/button';
@@ -70,15 +69,15 @@ export function DashboardSidebar() {
          <span className="text-xl font-bold">ZeroToOne</span>
         </Link>
       </div>
-      <nav className="flex-1 px-2 py-4 space-y-2">
+      <nav className="flex-1 px-4 py-4 space-y-1">
         {links.map((link) => (
           <Link
             key={link.href}
             href={link.href}
-            className={`flex items-center px-4 py-2 text-sm rounded-md transition-colors ${
+            className={`flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors ${
               pathname === link.href
                 ? 'bg-primary text-primary-foreground'
-                : 'text-muted-foreground hover:bg-muted hover:text-foreground'
+                : 'hover:bg-muted'
             }`}
           >
             <link.icon className="h-5 w-5 mr-3" />
@@ -86,7 +85,7 @@ export function DashboardSidebar() {
           </Link>
         ))}
       </nav>
-      <div className="p-4 border-t">
+      <div className="p-4 border-t mt-auto">
         <Button
           onClick={handleLogout}
           variant="ghost"

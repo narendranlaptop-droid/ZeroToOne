@@ -3,7 +3,6 @@ import './globals.css';
 import { AuthProvider } from '@/context/AuthContext';
 import { Toaster } from '@/components/ui/toaster';
 import { GeistSans } from 'geist/font/sans';
-import { GeistMono } from 'geist/font/mono';
 
 export const metadata: Metadata = {
   title: 'ZeroToOne',
@@ -17,9 +16,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <head>
-      </head>
-      <body className={`${GeistSans.className} antialiased`}>
+      <head />
+      <body className={`${GeistSans.variable} font-sans antialiased`}>
         <AuthProvider>
           {children}
           <Toaster />
